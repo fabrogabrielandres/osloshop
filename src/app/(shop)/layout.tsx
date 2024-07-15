@@ -1,8 +1,7 @@
-import TopMenu from '@/components/ui/TopMenu/TopMenu';
-import '../globals.css';
-import Sidebar from '@/components/ui/Sidebar/Sidebar';
+import "../globals.css";
+import { Sidebar, TopMenu } from "@/components";
 export default function shopLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {

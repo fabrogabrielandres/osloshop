@@ -1,4 +1,6 @@
+import { ProductSliceShow, QuantitySelector, SizeSelector } from "@/components";
 import { titleFont } from "@/config/fonts";
+import { Size } from "@/interfaces";
 import { initialData } from "@/seed/seed";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -16,9 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default function ProductPage({ params }: Props) {
   const { slug } = params;
 
-  const product = initialData.products.find(
-    (product) => product.slug === slug
-  );
+  const product = initialData.products.find((product) => product.slug === slug);
 
   if (!product) {
     notFound();
@@ -29,21 +29,24 @@ export default function ProductPage({ params }: Props) {
       {/* Slideshow */}
       <div className="col-span-1 md:col-span-2 ">
         {/* Mobile Slideshow */}
-
-
+        <ProductSliceShow
+          images={product.images}
+          title={product.title}
+          className="block md:hidden"
+        />
         {/* Desktop Slideshow */}
       </div>
 
       {/* Detalles */}
       <div className="col-span-1 px-5">
-        {/* SizeSelector */}
+        <SizeSelector availableSizes={product.sizes} selectedSize="M" />
+        <QuantitySelector quantity={1} />
 
         <h1 className={` ${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
 
         <p className="text-lg mb-5">${product.price}</p>
-
 
         {/* Descripción */}
         <h3 className="font-bold text-sm">Descripción</h3>
