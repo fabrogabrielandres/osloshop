@@ -6,7 +6,8 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import "./SlideShow.css";
+import "../SlideShow.css";
+
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import { useState } from "react";
 

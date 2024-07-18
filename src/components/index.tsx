@@ -1,3 +1,4 @@
+export * from "./Product/ProductMobileSlideshow/ProductMobileSlideshow";
 export * from "./Product/ProductSliceShow/ProductSliceShow";
 export * from "@/components/ui/TopMenu/TopMenu";
 export * from "./ui/Sidebar/Sidebar";
