@@ -1,5 +1,5 @@
 import "../globals.css";
-import { Sidebar, TopMenu } from "@/components";
+import { Footer, Sidebar, TopMenu } from "@/components";
 export default function shopLayout({
   children,
 }: {
@@ -10,6 +10,7 @@ export default function shopLayout({
       <TopMenu />
       <Sidebar />
       {children}
+      <Footer />
     </main>
   );
 }
