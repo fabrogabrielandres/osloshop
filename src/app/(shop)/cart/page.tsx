@@ -8,9 +8,9 @@ import { initialData } from "@/seed/seed";
 import { Product } from "@/interfaces";
 
 const productsInCart:Array<Product> = [
-  // initialData.products[0],
-  // initialData.products[1],
-  // initialData.products[2],
+  initialData.products[0],
+  initialData.products[1],
+  initialData.products[2],
 ];
 
 export default function CartPage() {
