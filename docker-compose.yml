@@ -4,7 +4,6 @@ version: '3.8'
 services:
   postgres-db:
     image: postgres:15.3
-    container_name: oslo
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
