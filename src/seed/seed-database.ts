@@ -47,9 +47,7 @@ async function Main() {
       data: dataToCreateImageInDb,
     });
 
-    console.log(dataToCreateImageInDb);
 
-    // console.log("productFromDb",productFromDb);
   });
 }
 

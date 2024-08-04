@@ -1,11 +1,24 @@
 "use server";
 
-import { TypeProduct } from "@/interfaces";
 import prisma from "@/lib/prisma";
 
-export const getPaginatedProductWithImages = async () => {
+interface Props {
+  page?: number;
+  take?: number;
+}
+
+export const getPaginatedProductWithImages = async ({
+  page = 1,
+  take = 12,
+}: Props) => {
+  if (isNaN(Number(page))) page = 1;
+  if (page < 1) page = 1;
+
   try {
+    // 1. get products
     const products = await prisma.product.findMany({
+      take: take,
+      skip: (page - 1) * take,
       include: {
         ProcutImage: {
           take: 2,
@@ -16,15 +29,20 @@ export const getPaginatedProductWithImages = async () => {
       },
     });
 
-    const productsData = products.map((product) => {
-      const { ProcutImage, categoryId, ...rest } = product;
-      const images = ProcutImage.map((images) => images.url);
-      const productWithImage = { ...rest, images };
-      return productWithImage;
-    });
+    //2. get page total
+    const numberOfProducts = await prisma.product.count();
+    const totalPages = Math.ceil(numberOfProducts / take);
+    
 
-    return productsData;
+    return {
+      currentPage: page,
+      totalPages: totalPages,
+      products: products.map((product) => ({
+        ...product,
+        images: product.ProcutImage.map((image) => image.url),
+      })),
+    };
   } catch (error) {
-    return [];
+    throw new Error("No se pudo cargar los productos");
   }
 };

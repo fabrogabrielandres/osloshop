@@ -1,3 +1,4 @@
+export * from "./ui/pagination/Pagination";
 export * from "./ui/Footer/Footer";
 export * from "./Product/ProductMobileSlideshow/ProductMobileSlideshow";
 export * from "./Product/ProductSliceShow/ProductSliceShow";

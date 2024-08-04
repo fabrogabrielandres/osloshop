@@ -1,15 +1,24 @@
 import { getPaginatedProductWithImages } from "@/actions";
-import { Title } from "@/components";
+import { Pagination, Title } from "@/components";
 import { ProductGrid } from "@/components/Products/ProductGrid/ProductGrid";
-import { initialData } from "@/seed/seed";
+import { redirect } from "next/navigation";
 
-export default async function Home() {
-  // const products = initialData.products;
+interface Props {
+  searchParams: {
+    page?: string;
+  }
+}
 
-  const productsImages = await getPaginatedProductWithImages();
-  console.log("****");
-  // console.log("AA",products[0]);
-  console.log("BB",productsImages[0]);
+export default async function Home({ searchParams }: Props) {
+  const page = searchParams.page ? Number(searchParams.page) : 1;
+
+  const { products,currentPage,totalPages } = await getPaginatedProductWithImages({
+    page: Number(page),
+  });
+
+  if(products.length === 0){
+    redirect("/")
+  }
 
   return (
     <>
@@ -19,8 +28,10 @@ export default async function Home() {
         title="Todos las categorias"
       ></Title>
       <div>
-        <ProductGrid products={productsImages}></ProductGrid>
+        <ProductGrid products={products}></ProductGrid>
       </div>
+
+      <Pagination totalPages={totalPages}/>
     </>
   );
 }
