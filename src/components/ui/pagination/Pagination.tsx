@@ -15,9 +15,9 @@ export const Pagination = ({ totalPages }: Props) => {
   const searchParams = useSearchParams();
 
   const pageString = searchParams.get("page") ?? 1;
-  const currentPage = isNaN(+pageString) ? 1 : +pageString;
+  const currentPage = isNaN(Number(pageString)) ? 1 : Number(pageString);
 
-  if (currentPage < 1 || isNaN(+pageString)) {
+  if (currentPage < 1 || isNaN(Number(pageString))) {
     redirect(pathname);
   }
 
@@ -30,11 +30,11 @@ export const Pagination = ({ totalPages }: Props) => {
       return `${pathname}?${params.toString()}`;
     }
 
-    if (+pageNumber <= 0) {
+    if (Number(pageNumber) <= 0) {
       return `${pathname}`; //   href="/kid";
     }
 
-    if (+pageNumber > totalPages) {
+    if (Number(pageNumber) > totalPages) {
       // Next >
       return `${pathname}?${params.toString()}`;
     }
