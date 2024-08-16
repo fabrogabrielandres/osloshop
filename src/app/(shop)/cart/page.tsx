@@ -16,7 +16,6 @@ const productsInCart:Array<Product> = [
 export default function CartPage() {
   // redirect('/empty');
 
-  console.log("dale",!productsInCart.length);
   if (!productsInCart.length) redirect("/empty");
   
 

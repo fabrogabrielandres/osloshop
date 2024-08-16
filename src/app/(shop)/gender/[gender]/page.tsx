@@ -1,9 +1,10 @@
+export const revalidate = 60;
 import { getPaginatedProductWithImages } from "@/actions";
 import { Pagination, Title } from "@/components";
 import { ProductGrid } from "@/components/Products/ProductGrid/ProductGrid";
 import { Categorie } from "@/interfaces";
 import { Gender } from "@prisma/client";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: {
@@ -26,7 +27,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     redirect(`/gender${params.gender}`);
   }
 
-  console.log("products", products);
 
   const labels: Record<string, string> = {
     men: "hombres",
