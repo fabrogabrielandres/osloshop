@@ -2,7 +2,7 @@ export * from "./ui/pagination/Pagination";
 export * from "./ui/Footer/Footer";
 export * from "./Product/ProductMobileSlideshow/ProductMobileSlideshow";
 export * from "./Product/ProductSliceShow/ProductSliceShow";
-export * from "@/components/ui/TopMenu/TopMenu";
+export * from "./ui/TopMenu/TopMenu";
 export * from "./ui/Sidebar/Sidebar";
 export * from "./Product/Size-selector/QuantitySelector/QuantitySelector";
 export * from "./Product/Size-selector/SizeSelector";

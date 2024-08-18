@@ -1,1 +1,2 @@
-export * from './products/products.Pagination';
+export { getPaginatedProductWithImages } from "./products/productsPagination";
+export { getProductBySlug } from "./products/getProductBySlug";

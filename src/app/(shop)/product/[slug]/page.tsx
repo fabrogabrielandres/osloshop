@@ -1,6 +1,6 @@
+import { getProductBySlug } from "@/actions/products/getProductBySlug";
 import { ProductMobileSlideshow, ProductSliceShow, QuantitySelector, SizeSelector } from "@/components";
 import { titleFont } from "@/config/fonts";
-import { Size } from "@/interfaces";
 import { initialData } from "@/seed/seed";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -15,11 +15,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: params.slug };
 }
 
-export default function ProductPage({ params }: Props) {
+export default async function ProductPage({ params }: Props) {
   const { slug } = params;
 
-  const product = initialData.products.find((product) => product.slug === slug);
-
+  const product = await getProductBySlug(slug)  
+  
+ 
   if (!product) {
     notFound();
   }
