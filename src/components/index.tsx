@@ -1,3 +1,4 @@
+export * from "./Product/StockLabel/StockLabel ";
 export * from "./ui/pagination/Pagination";
 export * from "./ui/Footer/Footer";
 export * from "./Product/ProductMobileSlideshow/ProductMobileSlideshow";
@@ -8,6 +9,7 @@ export * from "./Product/Size-selector/QuantitySelector/QuantitySelector";
 export * from "./Product/Size-selector/SizeSelector";
 export * from "./Title/Title";
 export * from "./ui/not-found/PageNotFound";
+
 
 
 

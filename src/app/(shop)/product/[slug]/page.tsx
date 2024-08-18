@@ -1,5 +1,13 @@
+export const revalidate = 86400; // 1 day
+
 import { getProductBySlug } from "@/actions/products/getProductBySlug";
-import { ProductMobileSlideshow, ProductSliceShow, QuantitySelector, SizeSelector } from "@/components";
+import {
+  ProductMobileSlideshow,
+  ProductSliceShow,
+  QuantitySelector,
+  SizeSelector,
+  StockLabel,
+} from "@/components";
 import { titleFont } from "@/config/fonts";
 import { initialData } from "@/seed/seed";
 import type { Metadata } from "next";
@@ -18,9 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = params;
 
-  const product = await getProductBySlug(slug)  
+  const product = await getProductBySlug(slug);
   
- 
+
   if (!product) {
     notFound();
   }
@@ -29,30 +37,42 @@ export default async function ProductPage({ params }: Props) {
     <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
       {/* Slideshow */}
       <div className="col-span-1 md:col-span-2 ">
+        {/* Mobile Slideshow */}
+        <ProductMobileSlideshow
+          title={product.title}
+          images={product.images}
+          className="block md:hidden"
+        />
+
         {/* Desktop Slideshow */}
         <ProductSliceShow
-          images={product.images}
           title={product.title}
+          images={product.images}
           className="hidden md:block"
-        />
-        {/* Mobile Slideshow */}
-        <ProductMobileSlideshow 
-          title={ product.title }
-          images={ product.images }
-          className="block md:hidden"
         />
       </div>
 
       {/* Detalles */}
       <div className="col-span-1 px-5">
-        <SizeSelector availableSizes={product.sizes} selectedSize="M" />
-        <QuantitySelector quantity={1} />
+        <StockLabel slug={product.slug} />
 
         <h1 className={` ${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
 
         <p className="text-lg mb-5">${product.price}</p>
+
+        {/* Selector de Tallas */}
+        <SizeSelector
+          selectedSize={product.sizes[1]}
+          availableSizes={product.sizes}
+        />
+
+        {/* Selector de Cantidad */}
+        <QuantitySelector quantity={2} />
+
+        {/* Button */}
+        <button className="btn-primary my-5">Agregar al carrito</button>
 
         {/* Descripción */}
         <h3 className="font-bold text-sm">Descripción</h3>
