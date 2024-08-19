@@ -1,6 +1,6 @@
 export const revalidate = 86400; // 1 day
 
-import { getProductBySlug } from "@/actions/products/getProductBySlug";
+import { getProductBySlug } from "@/actions";
 import {
   ProductMobileSlideshow,
   ProductSliceShow,
@@ -20,14 +20,25 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  return { title: params.slug };
+  const product = await getProductBySlug(params.slug);
+  console.log("productproductproductproduct", product);
+
+  return {
+    title: product?.slug,
+    description: product?.description,
+    openGraph: {
+      title: product?.title ?? "Producto no encontrado",
+      description: product?.description ?? "",
+      // images: [], // https://tttttttttttyyyyyyyyyyyyy.com/products/image.png
+      images: [`/products/${product?.images[1]}`],
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = params;
 
   const product = await getProductBySlug(slug);
-  
 
   if (!product) {
     notFound();
