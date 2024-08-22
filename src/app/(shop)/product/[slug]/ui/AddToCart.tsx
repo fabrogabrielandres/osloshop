@@ -1,9 +1,8 @@
 "use client";
 import { QuantitySelector, SizeSelector, StockLabel } from "@/components";
 import { CartProduct, Product, Size } from "@/interfaces";
-import { useCartProduct } from "@/store";
+import {  useCartProductStore } from "@/store";
 import { useState } from "react";
-import { cartProduct } from "../../../../../store/cartProduct/cartProduct.Store";
 
 interface Props {
   product: Product;
@@ -11,21 +10,17 @@ interface Props {
 export const AddToCart = ({ product }: Props) => {
   const {
     sizes,
-    description,
-    gender,
     id,
     images,
-    inStock,
     price,
     slug,
-    tags,
     title,
   } = product;
   const [size, setSize] = useState<Size | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
 
-  const addProductToCart = useCartProduct((state) => state.addProductToCart);
+  const addProductToCart = useCartProductStore((state) => state.addProductToCart);
 
   const changeSize = (size: Size) => {
     setSize(size);

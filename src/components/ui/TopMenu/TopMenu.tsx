@@ -3,12 +3,15 @@ import { titleFont } from "@/config/fonts";
 import Link from "next/link";
 import React from "react";
 import { IoCartOutline, IoSearchOutline } from "react-icons/io5";
-import { useSidebarUi } from "@/store";
 import clsx from "clsx";
+import { useCartProductStore, useSidebarUi } from "@/store";
 
 export const TopMenu = () => {
   const isSideMenuOpen = useSidebarUi((state) => state.isSideMenuOpen);
   const openSideMenu = useSidebarUi((state) => state.openSideMenu);
+
+  const totalItemsIncart = useCartProductStore((state) => state.getTotalItems());
+
 
   return (
     <div className="relative bg-blend-screen">
@@ -54,7 +57,7 @@ export const TopMenu = () => {
           <Link href="/cart" className="mx-2">
             <div className="relative">
               <span className="absolute text-xs px-1 rounded-full font-bold -top-2 -right-2 bg-blue-700 text-white">
-                3
+                {totalItemsIncart}
               </span>
               <IoCartOutline className="w-5 h-5" />
             </div>
