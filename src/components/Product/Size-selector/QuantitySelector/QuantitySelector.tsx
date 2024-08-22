@@ -1,19 +1,16 @@
 "use client";
 
-import { count } from "console";
-import { useState } from "react";
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 interface Props {
   quantity: number;
-  onQuantityChange:(value:number)=>void
 }
 
-export const QuantitySelector = ({ quantity, onQuantityChange }: Props) => {
+export const QuantitySelector = ({ quantity }: Props) => {
   
   const onValueChanged = (value: number) => {
     if (1 > value + quantity) return;
-    onQuantityChange( value + quantity);
+    // onQuantityChange( value + quantity);
   };
 
   return (

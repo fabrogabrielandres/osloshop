@@ -35,7 +35,7 @@ export const AddToCart = ({ product }: Props) => {
     if (!size) return;
     const cartProduct: CartProduct = {
       id,
-      images: images[0],
+      image: images[0],
       price,
       quantity,
       size,
@@ -71,7 +71,6 @@ export const AddToCart = ({ product }: Props) => {
       {/* Selector de Cantidad */}
       <QuantitySelector
         quantity={quantity}
-        onQuantityChange={onQuantityChange}
       />
 
       {/* Button */}
