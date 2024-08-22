@@ -8,14 +8,7 @@ interface Props {
   product: Product;
 }
 export const AddToCart = ({ product }: Props) => {
-  const {
-    sizes,
-    id,
-    images,
-    price,
-    slug,
-    title,
-  } = product;
+  const { sizes, id, images, price, slug, title } = product;
   const [size, setSize] = useState<Size | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
