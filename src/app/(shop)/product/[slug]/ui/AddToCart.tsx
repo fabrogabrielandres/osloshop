@@ -1,5 +1,5 @@
 "use client";
-import { QuantitySelector, SizeSelector, StockLabel } from "@/components";
+import { QuantitySelector, SizeSelector } from "@/components";
 import { CartProduct, Product, Size } from "@/interfaces";
 import { useCartProductStore } from "@/store";
 import { useState } from "react";
@@ -66,7 +66,7 @@ export const AddToCart = ({ product }: Props) => {
       {/* Selector de Cantidad */}
       <QuantitySelector
         quantity={quantity}
-        onQuantityChange={onQuantityChange}
+        onQuantityChange={(quantity)=>onQuantityChange(quantity)}
       />
 
       {/* Button */}

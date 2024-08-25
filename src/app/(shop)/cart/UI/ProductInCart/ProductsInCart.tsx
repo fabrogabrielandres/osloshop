@@ -3,19 +3,29 @@
 import { QuantitySelector } from "@/components";
 import { useCartProductStore } from "@/store";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export const ProductsInCart = () => {
+  const products = useCartProductStore((state) => state.cart);
+  const updateProductQuantity = useCartProductStore((state) => state.updateProductQuantity);
+  const removeProduct = useCartProductStore( state => state.removeProduct );
+  const [loaded, setLoaded] = useState(false);
 
-    const products  = useCartProductStore((state)=>state.cart)
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
+  if (!loaded) {
+    return <p>Loading...</p>;
+  }
 
-
-    return (
+  return (
     <>
       {/* Items */}
       {products &&
         products.map((product) => (
-          <div key={product.slug} className="flex mb-5">
+          <div key={`${product.slug}${product.size}`} className="flex mb-5">
             <Image
               src={`/products/${product.image}`}
               width={100}
@@ -27,14 +37,24 @@ export const ProductsInCart = () => {
               alt={product.title}
               className="mr-5 rounded"
             />
-            <h1>{`/products/${product.image}`}</h1>
-
+        
             <div>
-              <p>{product.title}</p>
-              <p>${product.price}</p>
-              <QuantitySelector key={product.id} quantity={product.quantity} onQuantityChange={()=>console.log()}/>
-
-              <button className="underline mt-3">Remover</button>
+              <Link
+                className="hover:underline cursor-pointer"
+                href={`/product/${product.slug} `}
+              >
+                {product.size} - {product.title}
+              </Link>
+              <QuantitySelector
+                key={product.id}
+                quantity={product.quantity}
+                onQuantityChange={(quantity) =>
+                  updateProductQuantity(product, quantity)
+                }
+              />
+            <button 
+              onClick={ () => removeProduct(product) }
+              className="underline mt-3">Remover</button>
             </div>
           </div>
         ))}
