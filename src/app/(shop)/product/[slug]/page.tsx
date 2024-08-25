@@ -4,8 +4,6 @@ import { getProductBySlug } from "@/actions";
 import {
   ProductMobileSlideshow,
   ProductSliceShow,
-  QuantitySelector,
-  SizeSelector,
   StockLabel,
 } from "@/components";
 import type { Metadata } from "next";

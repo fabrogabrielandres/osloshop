@@ -5,6 +5,8 @@ import { devtools, persist } from "zustand/middleware";
 export interface CartProductActions {
   addProductToCart: (product: CartProduct) => void;
   getTotalItems: () => number;
+  updateProductQuantity: (product: CartProduct, quantity: number) => void;
+  removeProduct: (product: CartProduct) => void;
 }
 
 export interface StateCart {
@@ -16,7 +18,6 @@ export const cartProductSlice: StateCreator<
   [["zustand/devtools", never]]
 > = (set, get) => ({
   cart: [],
-
   addProductToCart: (product) => {
     const { cart } = get();
     const productInCart = cart!.some((item) => {
@@ -39,8 +40,31 @@ export const cartProductSlice: StateCreator<
     set({ cart: updateProductInCart }, false, "ProductToCart-add");
   },
   getTotalItems: () => {
-    const listProductsInCart = get().cart.reduce((acumulator, currentValue) => acumulator + currentValue.quantity,0);
+    const listProductsInCart = get().cart.reduce(
+      (acumulator, currentValue) => acumulator + currentValue.quantity,
+      0
+    );
     return listProductsInCart;
+  },
+  updateProductQuantity: (product: CartProduct, quantity: number) => {
+    const { cart } = get();
+
+    const updatedCartProducts = cart.map((item) => {
+      if (item.id === product.id && item.size === product.size) {
+        return { ...item, quantity: quantity };
+      }
+      return item;
+    });
+
+    set({ cart: updatedCartProducts }, false, "updateProductQuantity");
+  },
+  removeProduct: (product: CartProduct) => {
+    const { cart } = get();
+    const updatedCartProducts = cart.filter(
+      (item) => item.id !== product.id || item.size !== product.size
+    );
+
+    set({ cart: updatedCartProducts });
   },
 });
 

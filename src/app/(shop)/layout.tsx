@@ -1,3 +1,4 @@
+import Hydration from "@/store/Hidratation/Hidratation";
 import "../globals.css";
 import { Footer, Sidebar, TopMenu } from "@/components";
 export default function shopLayout({
@@ -7,6 +8,7 @@ export default function shopLayout({
 }) {
   return (
     <main className="min-h-screen">
+      {/* <Hydration/> */}
       <TopMenu />
       <Sidebar />
       {children}
