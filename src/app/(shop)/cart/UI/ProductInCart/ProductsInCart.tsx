@@ -7,7 +7,6 @@ import Image from "next/image";
 export const ProductsInCart = () => {
 
     const products  = useCartProductStore((state)=>state.cart)
-    const upDateProductQuantity = useCartProductStore((state)=>state.upDateProductQuantity)
 
 
 
@@ -33,7 +32,7 @@ export const ProductsInCart = () => {
             <div>
               <p>{product.title}</p>
               <p>${product.price}</p>
-              <QuantitySelector key={product.id} quantity={product.quantity} onQuantityChange={()=>upDateProductQuantity(product,product.quantity)}/>
+              <QuantitySelector key={product.id} quantity={product.quantity} onQuantityChange={()=>console.log()}/>
 
               <button className="underline mt-3">Remover</button>
             </div>
