@@ -16,7 +16,7 @@ export const TopMenu = () => {
 
   useEffect(() => {
     setload(false);
-  }, [totalItemsIncart]);
+  }, []);
 
   return (
     <div className="relative bg-blend-screen">

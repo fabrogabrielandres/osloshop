@@ -19,7 +19,7 @@ export interface CartProduct {
   price: number;
   quantity:number;
   size: Size;
-  images: string;
+  image: string;
 }
 
 export type Categorie = "men" | "women" | "kid" | "unisex";
