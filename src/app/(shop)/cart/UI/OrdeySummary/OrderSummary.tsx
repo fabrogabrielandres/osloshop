@@ -19,7 +19,6 @@ export const OrderSummary = () => {
 
   useEffect(() => {
     if (itemsInCart === 0 && loaded === true) {
-      console.log("que onda", itemsInCart === 0 && loaded === true);
       router.replace("/empty");
     }
   }, [itemsInCart, loaded ]);
