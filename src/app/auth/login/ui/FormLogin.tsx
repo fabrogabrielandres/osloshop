@@ -1,17 +1,14 @@
 "use client";
 import { authenticate } from "@/actions";
+import clsx from "clsx";
 import Link from "next/link";
-import { useActionState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
 export const FormLogin = () => {
- 
   const [state, dispatch] = useFormState(authenticate, undefined);
-  console.log({state});
-  
-  
-  return (
+  console.log({ state });
 
+  return (
     <form action={dispatch} className="flex flex-col">
       <label htmlFor="email">Correo electrónico</label>
       <input
@@ -26,9 +23,7 @@ export const FormLogin = () => {
         type="password"
         name="password"
       />
-
-      <button className="btn-primary" type="submit">Ingresar</button>
-
+      <LoginButton />
       {/* divisor l ine */}
       <div className="flex items-center my-5">
         <div className="flex-1 border-t border-gray-500"></div>
@@ -40,5 +35,21 @@ export const FormLogin = () => {
         Crear una nueva cuenta
       </Link>
     </form>
+  );
+};
+const LoginButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      className={clsx({
+        "btn-primary": !pending,
+        "btn-disabled": pending,
+      })}
+      disabled={pending}
+    >
+      Ingresar
+    </button>
   );
 };
