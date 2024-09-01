@@ -4,14 +4,23 @@ import prisma from "../lib/prisma";
 async function Main() {
   if (process.env.NODE_ENV === "production") return;
 
-  //delete all registers previus
+  const { categories,products,user } = initialData
 
+  //delete all users previus
+  await prisma.user.deleteMany();
+
+
+  //delete all registers previus
   await prisma.procutImage.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
 
+  //insert Users
+
+  await prisma.user.createMany({data:initialData.user})
+
   //insert categories
-  const dataToCreateCategoriInDb = initialData.categories.map((category) => {
+  const dataToCreateCategoriInDb = categories.map((category) => {
     return { name: category };
   });
 
@@ -25,7 +34,7 @@ async function Main() {
   }, {} as Record<string, string>);
 
   //insert products and Images
-  initialData.products.forEach(async (product) => {
+  products.forEach(async (product) => {
     let { images, type, ...rest } = product;
     const productToInsert = {
       ...rest,
@@ -46,6 +55,8 @@ async function Main() {
     await prisma.procutImage.createMany({
       data: dataToCreateImageInDb,
     });
+
+
 
 
   });
