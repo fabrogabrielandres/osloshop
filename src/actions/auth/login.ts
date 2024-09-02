@@ -13,6 +13,8 @@ export async function authenticate(
     
     await signIn('credentials', formData);
     const { email, passoword  } = Object.fromEntries(formData)
+    console.log("d",email, passoword);
+    
     
   } catch (error) {
     return "CredentialsSignin"
