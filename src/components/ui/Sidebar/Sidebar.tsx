@@ -25,10 +25,6 @@ export const Sidebar = () => {
   const { data: session } = useSession();
   const isAuthenticated = !!session?.user;
 
-  useEffect(() => {
-    console.log("daleee",session);
-    
-  }, [session])
   
   
   return (

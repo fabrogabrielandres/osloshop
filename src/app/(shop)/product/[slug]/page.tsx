@@ -1,6 +1,5 @@
 export const revalidate = 86400; // 1 day
 
-import { getProductBySlug } from "@/actions";
 import {
   ProductMobileSlideshow,
   ProductSliceShow,
@@ -10,6 +9,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AddToCart } from "./ui";
 import { titleFont } from "@/config/fonts";
+import { getProductBySlug } from "@/actions/products/getProductBySlug";
 
 interface Props {
   params: {
