@@ -1,7 +1,7 @@
 'use client';
 
 
-import { currencyFormat } from '@/app/utils';
+import { currencyFormat } from '@/utils';
 import { Product } from '@/interfaces';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -42,11 +42,6 @@ export const AddToCart = ({ product }: Props) => {
     setQuantity(1);
 
     addProductToCart(cartProduct);
-    console.log({
-      quantity,
-      size,
-      product,
-    });
   };
 
   return (

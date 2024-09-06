@@ -1,6 +1,6 @@
 "use server";
 
-import { sleep } from "@/app/utils";
+import { sleep } from "@/utils";
 import prisma from "@/lib/prisma";
 
 interface Props{

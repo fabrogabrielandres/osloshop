@@ -4,9 +4,10 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import prisma from "./lib/prisma";
 import bcryptjs from "bcryptjs";
-import { sleep } from "./app/utils";
+import { sleep } from "./utils";
+import { redirect } from "next/navigation";
 
-const authConfig = {
+export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/auth/login",
     newUser: "/auth/new-account",
@@ -43,9 +44,4 @@ const authConfig = {
   ],
 } satisfies NextAuthConfig;
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth(authConfig);
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

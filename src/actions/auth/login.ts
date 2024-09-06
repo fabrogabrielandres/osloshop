@@ -1,23 +1,23 @@
-'use server';
- 
-import { signIn } from '@/auth.config';
-import { AuthError } from 'next-auth';
- 
- 
+"use server";
+
+import { signIn } from "@/auth.config";
+import { AuthError } from "next-auth";
+
 export async function authenticate(
   prevState: string | undefined,
-  formData: FormData,
+  formData: FormData
 ) {
   try {
-    
-    
-    await signIn('credentials', formData);
-    const { email, passoword  } = Object.fromEntries(formData)
-    console.log("d",email, passoword);
-    
-    
+    const { email, password } = Object.fromEntries(formData);
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    return "Success";
   } catch (error) {
-    return "CredentialsSignin"
+    return "CredentialsSignin";
 
     // if (error instanceof AuthError) {
     //   switch (error.type) {
@@ -28,6 +28,5 @@ export async function authenticate(
     //   }
     // }
     // throw error;
-
   }
 }

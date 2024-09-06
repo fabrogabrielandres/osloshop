@@ -12,12 +12,25 @@ import {
   IoTicketOutline,
 } from "react-icons/io5";
 import clsx from "clsx";
+import { signOut } from "@/auth.config";
+import { logOut } from "@/actions";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export const Sidebar = () => {
   const closeMenu = useSidebarUi((state) => state.closeSideMenu);
   const isSideMenuOpen = useSidebarUi((state) => state.isSideMenuOpen);
-  const openSideMenu = useSidebarUi((state) => state.openSideMenu);
 
+  
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+
+  useEffect(() => {
+    console.log("daleee",session);
+    
+  }, [session])
+  
+  
   return (
     <div>
       {/* Background black */}
@@ -77,21 +90,28 @@ export const Sidebar = () => {
           <span className="ml-3 text-xl">Ordenes</span>
         </Link>
 
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogInOutline size={30} />
-          <span className="ml-3 text-xl">Ingresar</span>
-        </Link>
+        {!isAuthenticated && (
+          <Link
+            href="/auth/login"
+            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+          >
+            <IoLogInOutline size={30} />
+            <span className="ml-3 text-xl">Ingresar</span>
+          </Link>
+        )}
 
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogOutOutline size={30} />
-          <span className="ml-3 text-xl">Salir</span>
-        </Link>
+        {isAuthenticated && (
+          <button
+            onClick={() => {
+              logOut();
+              closeMenu();
+            }}
+            className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+          >
+            <IoLogOutOutline size={30} />
+            <span className="ml-3 text-xl">Salir</span>
+          </button>
+        )}
 
         {/* Line Separator */}
         <div className="w-full h-px bg-gray-200 my-10" />

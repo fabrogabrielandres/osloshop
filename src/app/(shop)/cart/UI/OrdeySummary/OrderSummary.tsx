@@ -1,6 +1,6 @@
 "use client";
 
-import { currencyFormat } from "@/app/utils";
+import { currencyFormat } from "@/utils";
 import { useCartProductStore } from "@/store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

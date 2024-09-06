@@ -9,7 +9,7 @@ export default async function ProfilePage() {
   return (
     <div>
       <Title title="Profile" />
-      <pre>{JSON.stringify(session.user, null, 2)}</pre>
+      <pre>{JSON.stringify(session?.user, null, 2)}</pre>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { inter } from "@/config/fonts";
-import './globals.css';
+import "./globals.css";
+import NextAuthProvider from "@/components/provaiders/NextAuthProvider";
+import { auth } from "@/auth.config";
+
 
 export const metadata: Metadata = {
   title: {
@@ -9,14 +12,17 @@ export const metadata: Metadata = {
   },
   description: "Una tienda virtual de productos",
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <NextAuthProvider session={session}>{children}</NextAuthProvider>
+      </body>
     </html>
   );
 }
