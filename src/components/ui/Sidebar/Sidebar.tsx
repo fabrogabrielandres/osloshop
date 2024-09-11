@@ -23,6 +23,7 @@ export const Sidebar = () => {
   const isSideMenuOpen = useSidebarUi((state) => state.isSideMenuOpen);
   const { data: session, status, update } = useSession();
   const isAuthenticated = !!session?.user;
+  const isAdmin = session?.user.role === "admin";
 
   return (
     <div>
@@ -112,12 +113,10 @@ export const Sidebar = () => {
           </Link>
         )}
 
-        {
-          // isAdmin &&
+        {isAdmin && (
           <>
             {/* Line Separator */}
             <div className="w-full h-px bg-gray-200 my-10" />
-
             <Link
               href="/"
               className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
@@ -125,7 +124,6 @@ export const Sidebar = () => {
               <IoShirtOutline size={30} />
               <span className="ml-3 text-xl">Productos</span>
             </Link>
-
             <Link
               href="/"
               className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
@@ -133,7 +131,6 @@ export const Sidebar = () => {
               <IoTicketOutline size={30} />
               <span className="ml-3 text-xl">Ordenes</span>
             </Link>
-
             <Link
               href="/"
               className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
@@ -142,7 +139,7 @@ export const Sidebar = () => {
               <span className="ml-3 text-xl">Usuarios</span>
             </Link>
           </>
-        }
+        )}
       </nav>
     </div>
   );
