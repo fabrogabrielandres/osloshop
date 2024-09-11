@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { inter } from "@/config/fonts";
 import "./globals.css";
-import NextAuthProvider from "@/components/provaiders/NextAuthProvider";
 import { auth } from "@/auth.config";
-
+import { SessionProvider } from "next-auth/react";
+import NextAuthProvider from "@/components/provaiders/NextAuthProvider";
+// import { NextAuthProvider } from "@/components/provaiders";
 
 export const metadata: Metadata = {
   title: {
@@ -18,8 +19,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  console.log("server side",session, new Date());
-  
   return (
     <html lang="en">
       <body className={inter.className}>

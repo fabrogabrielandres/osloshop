@@ -14,9 +14,11 @@ export async function authenticate(
       password,
       redirect: false,
     });
-
+    // console.log("log in try ");
+    
     return "Success";
   } catch (error) {
+    // console.log("log in catch ");
     return "CredentialsSignin";
 
     // if (error instanceof AuthError) {
