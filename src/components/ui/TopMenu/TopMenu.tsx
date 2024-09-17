@@ -60,7 +60,7 @@ export const TopMenu = () => {
           </Link>
 
           <Link
-            href={totalItemsIncart === 0 ? "/empty" : "/cart"}
+            href={(totalItemsIncart == 0 && !load) ? "/empty" : "/cart"}
             className="mx-2"
           >
             <div className="relative">

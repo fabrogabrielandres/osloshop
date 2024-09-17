@@ -4,16 +4,17 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import clsx from "clsx";
+import { login, newAccount } from "@/actions";
 
 export default function NewAccountPage() {
   const formik = useFormik({
     initialValues: {
-      firstName: "",
+      name: "",
       password: "",
       email: "",
     },
     validationSchema: Yup.object({
-      firstName: Yup.string()
+      name: Yup.string()
         .max(15, "Must be 15 characters or less")
         .required("Required"),
       password: Yup.string()
@@ -22,8 +23,22 @@ export default function NewAccountPage() {
         .required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      const response = await newAccount({ ...values });
+      if (!response.ok && response.error["email"]) {
+        formik.setErrors({
+          email: "email was created already",
+        });
+      }
+
+      try {
+        await login({ email: values.email, password: values.password });
+        window.location.replace("/");
+
+      } catch (error) {
+        console.log(error);
+                
+      }
     },
   });
   return (
@@ -34,18 +49,18 @@ export default function NewAccountPage() {
         <label htmlFor="email">Nombre completo</label>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
-            "border-red-500": formik.errors.firstName,
+            "border-red-500": formik.errors.name,
           })}
-          id="firstName"
-          name="firstName"
+          id="name"
+          name="name"
           type="text"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.firstName}
+          value={formik.values.name}
         />
         <span className="text-red-500 mb-5">
-          {formik.touched.firstName && formik.errors.firstName ? (
-            <div>{formik.errors.firstName}</div>
+          {formik.touched.name && formik.errors.name ? (
+            <div>{formik.errors.name}</div>
           ) : null}
         </span>
 
@@ -89,9 +104,10 @@ export default function NewAccountPage() {
           className="btn-primary"
           disabled={
             !!formik.errors.email ||
-            !!formik.errors.firstName ||
+            !!formik.errors.name ||
             !!formik.errors.password
           }
+          onClick={formik.submitForm}
         >
           Crear cuenta
         </button>
@@ -100,7 +116,7 @@ export default function NewAccountPage() {
           Es disable{" "}
           {JSON.stringify(
             !!formik.errors.email ||
-              !!formik.errors.firstName ||
+              !!formik.errors.name ||
               !!formik.errors.password
           )}
         </span>

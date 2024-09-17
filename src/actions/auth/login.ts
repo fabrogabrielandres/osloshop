@@ -15,7 +15,7 @@ export async function authenticate(
       redirect: false,
     });
     // console.log("log in try ");
-    
+
     return "Success";
   } catch (error) {
     // console.log("log in catch ");
@@ -32,3 +32,18 @@ export async function authenticate(
     // throw error;
   }
 }
+interface PropsLogin {
+  email: string;
+  password: string;
+}
+export const login = async ({ email, password }: PropsLogin) => {
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+  } catch (error) {
+    return "error in login credentials";
+  }
+};
