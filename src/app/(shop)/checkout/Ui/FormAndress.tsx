@@ -16,8 +16,16 @@ interface FormAdressImput {
   phoneNumber: string;
   rememberAdress: boolean;
 }
+interface Props {
+  countries: Country[];
+}
 
-export const FormAndress = () => {
+interface Country {
+  id: string;
+  name: string;
+}
+
+export const FormAndress = ({ countries }: Props) => {
   const formik = useFormik<FormAdressImput>({
     initialValues: {
       name: "",
@@ -190,7 +198,11 @@ export const FormAndress = () => {
           value={formik.values.country}
         >
           <option value="">[ Seleccione ]</option>
-          <option value="CRI">Costa Rica</option>
+          {countries.map(({ id, name }) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
         </select>
         <span className="text-red-500 mb-5 mt-2">
           {formik.touched.country && formik.errors.country ? (
@@ -258,7 +270,7 @@ export const FormAndress = () => {
         <button
           onClick={formik.submitForm}
           className={clsx("flex w-full sm:w-1/2 justify-center mt-4 ", {
-            "btn-primary": formik.isValid , 
+            "btn-primary": formik.isValid,
             "btn-secondary": !formik.isValid && !formik.dirty,
           })}
           disabled={formik.isValid && !formik.dirty}

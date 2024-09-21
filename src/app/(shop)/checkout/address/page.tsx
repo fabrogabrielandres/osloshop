@@ -1,8 +1,14 @@
+export const revalidate = 0
 import { Title } from '@/components';
-import Link from 'next/link';
 import { FormAndress } from '../Ui/FormAndress';
+import { getCountries } from '@/actions/country/get-countrys';
 
-export default function AddressPage() {
+
+export default async function AddressPage() {
+ 
+
+  const countries = await getCountries()
+
   return (
     <div className="flex flex-col sm:justify-center sm:items-center mb-72 px-10 sm:px-0">
 
@@ -12,7 +18,7 @@ export default function AddressPage() {
         
         <Title title="Dirección" subtitle="Dirección de entrega" />
 
-        <FormAndress />
+        <FormAndress countries={countries}/>
 
       </div>
 
