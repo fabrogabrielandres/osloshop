@@ -1,4 +1,5 @@
 "use client";
+import { Country } from "@/interfaces";
 import clsx from "clsx";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -20,10 +21,6 @@ interface Props {
   countries: Country[];
 }
 
-interface Country {
-  id: string;
-  name: string;
-}
 
 export const FormAndress = ({ countries }: Props) => {
   const formik = useFormik<FormAdressImput>({
