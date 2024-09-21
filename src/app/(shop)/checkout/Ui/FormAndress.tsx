@@ -5,17 +5,30 @@ import Link from "next/link";
 import React from "react";
 import * as Yup from "yup";
 
+interface FormAdressImput {
+  name: string;
+  lastName: string;
+  address: string;
+  address2?: string;
+  postalCode: string;
+  city: string;
+  country: string;
+  phoneNumber: string;
+  rememberAdress: boolean;
+}
+
 export const FormAndress = () => {
-  const formik = useFormik({
+  const formik = useFormik<FormAdressImput>({
     initialValues: {
       name: "",
       lastName: "",
       address: "",
       address2: "",
-      cip: "",
+      postalCode: "",
       city: "",
       country: "",
       phoneNumber: "",
+      rememberAdress: false,
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -28,7 +41,7 @@ export const FormAndress = () => {
         .max(15, "Must be 15 characters or less")
         .required("Required"),
       address2: Yup.string(),
-      cip: Yup.string()
+      postalCode: Yup.string()
         .max(15, "Must be 15 characters or less")
         .required("Required"),
       city: Yup.string()
@@ -40,6 +53,7 @@ export const FormAndress = () => {
       phoneNumber: Yup.string()
         .max(15, "Must be 15 characters or less")
         .required("Required"),
+      rememberAdress: Yup.boolean(),
     }),
     onSubmit: async (values) => {
       console.log(values);
@@ -126,18 +140,19 @@ export const FormAndress = () => {
         <span>Código postal</span>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
-            "border-red-500": formik.errors.cip && formik.touched.cip,
+            "border-red-500":
+              formik.errors.postalCode && formik.touched.postalCode,
           })}
-          id="cip"
-          name="cip"
+          id="postalCode"
+          name="postalCode"
           type="text"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.cip}
+          value={formik.values.postalCode}
         />
         <span className="text-red-500 mb-5 mt-2">
-          {formik.touched.cip && formik.errors.cip ? (
-            <div>{formik.errors.cip}</div>
+          {formik.touched.postalCode && formik.errors.postalCode ? (
+            <div>{formik.errors.postalCode}</div>
           ) : null}
         </span>
       </div>
@@ -205,7 +220,7 @@ export const FormAndress = () => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <div className="inline-flex items-center mb-2">
+        <div className="inline-flex items-center mb-2 ">
           <label
             className="relative flex cursor-pointer items-center rounded-full "
             htmlFor="checkbox"
@@ -214,8 +229,12 @@ export const FormAndress = () => {
             <input
               type="checkbox"
               className="border-gray-500 before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
-              id="checkbox"
               // checked
+              id="rememberAdress"
+              name="rememberAdress"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.phoneNumber}
             />
             <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
               <svg
@@ -238,8 +257,8 @@ export const FormAndress = () => {
         </div>
         <button
           onClick={formik.submitForm}
-          className={clsx("flex w-full sm:w-1/2 justify-center mb-2 ", {
-            "btn-primary": formik.isValid,
+          className={clsx("flex w-full sm:w-1/2 justify-center mt-4 ", {
+            "btn-primary": formik.isValid , 
             "btn-secondary": !formik.isValid && !formik.dirty,
           })}
           disabled={formik.isValid && !formik.dirty}
