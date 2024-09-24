@@ -1,13 +1,17 @@
 "use client";
+import { setUserAddress } from "@/actions";
+import { auth } from "@/auth.config";
 import { Country } from "@/interfaces";
+import { useAdressStore } from "@/store";
 import clsx from "clsx";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 
 interface FormAdressImput {
-  name: string;
+  firstName: string;
   lastName: string;
   address: string;
   address2?: string;
@@ -21,22 +25,39 @@ interface Props {
   countries: Country[];
 }
 
-
 export const FormAndress = ({ countries }: Props) => {
+  const setAddress = useAdressStore((state) => state.setAddress);
+  const address = useAdressStore((state) => state.address);
+  const [load, setLoad] = useState(true);
+
+
+  const user =  useSession();
+  console.log("en el form addres",user);
+  
+  useEffect(() => {
+    setLoad(false);
+    formik.resetForm({
+      values: {
+        firstName: address.firstName,
+        lastName: address.lastName,
+        address: address.address,
+        address2: address.address2,
+        postalCode: address.postalCode,
+        city: address.city,
+        country: address.country,
+        phoneNumber: address.phoneNumber,
+        rememberAdress: false,
+      },
+    });
+  }, [address]);
+
   const formik = useFormik<FormAdressImput>({
     initialValues: {
-      name: "",
-      lastName: "",
-      address: "",
-      address2: "",
-      postalCode: "",
-      city: "",
-      country: "",
-      phoneNumber: "",
+      ...address,
       rememberAdress: false,
     },
     validationSchema: Yup.object({
-      name: Yup.string()
+      firstName: Yup.string()
         .max(15, "Must be 15 characters or less")
         .required("Required"),
       lastName: Yup.string()
@@ -62,28 +83,35 @@ export const FormAndress = ({ countries }: Props) => {
     }),
     onSubmit: async (values) => {
       console.log(values);
+      const { rememberAdress, ...rest } = values;
+      setAddress({ ...rest });
+      await setUserAddress(rest, "laskdjflasf");
     },
   });
 
-  return (
+  return load === true ? (
+    <span>{JSON.stringify(address)}</span>
+  ) : (
     <div className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2">
+      <span>{JSON.stringify(address)}</span>
       <div className="flex flex-col mb-2">
         <span>Nombres</span>
         <input
           //  className="p-2 border rounded-md bg-gray-200"
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
-            "border-red-500": formik.errors.name && formik.touched.name,
+            "border-red-500":
+              formik.errors.firstName && formik.touched.firstName,
           })}
-          id="name"
-          name="name"
+          id="firstName"
+          name="firstName"
           type="text"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.name}
+          value={formik.values.firstName}
         />
         <span className="text-red-500 mb-5 mt-2">
-          {formik.touched.name && formik.errors.name ? (
-            <div>{formik.errors.name}</div>
+          {formik.touched.firstName && formik.errors.firstName ? (
+            <div>{formik.errors.firstName}</div>
           ) : null}
         </span>
       </div>
