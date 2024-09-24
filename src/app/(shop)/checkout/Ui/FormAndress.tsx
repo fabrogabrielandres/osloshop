@@ -1,5 +1,5 @@
 "use client";
-import { setUserAddress } from "@/actions";
+import { deleteUserAddress, setUserAddress } from "@/actions";
 import { auth } from "@/auth.config";
 import { Country } from "@/interfaces";
 import { useAdressStore } from "@/store";
@@ -97,6 +97,8 @@ export const FormAndress = ({ countries }: Props) => {
             rememberAdress: values.rememberAdress,
           },
         });
+      } else {
+        await deleteUserAddress({ userId: userId! });
       }
     },
   });
