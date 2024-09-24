@@ -11,13 +11,11 @@ interface Props {
 export const setUserAddress = async (addressUser: Address, userId: string) => {
   try {
     const newAddress = await createOrReplaceAddress({ userId, addressUser });
-
     return {
       ok: true,
       address: newAddress,
     };
   } catch (error) {
-    console.log(error);
     return {
       ok: false,
       message: "No se pudo grabar la dirección",
@@ -38,13 +36,14 @@ const createOrReplaceAddress = async ({ userId, addressUser }: Props) => {
     countryId: addressUser.country,
   };
   try {
-    const user = prisma.addressUser.findUnique({
+    const user = await prisma.addressUser.findUnique({
       where: {
         userId: userId,
       },
     });
+
     if (!user) {
-      const newUser = prisma.addressUser.create({
+      const newUser = await prisma.addressUser.create({
         data: { ...toSabeAddress },
       });
       return newUser;

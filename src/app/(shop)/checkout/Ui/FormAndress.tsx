@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as Yup from "yup";
 
 interface FormAdressImput {
@@ -30,10 +30,8 @@ export const FormAndress = ({ countries }: Props) => {
   const address = useAdressStore((state) => state.address);
   const [load, setLoad] = useState(true);
 
-
-  const user =  useSession();
-  console.log("en el form addres",user);
-  
+  const user = useSession();
+  const userId = user.data?.user.id;
   useEffect(() => {
     setLoad(false);
     formik.resetForm({
@@ -82,10 +80,24 @@ export const FormAndress = ({ countries }: Props) => {
       rememberAdress: Yup.boolean(),
     }),
     onSubmit: async (values) => {
-      console.log(values);
       const { rememberAdress, ...rest } = values;
-      setAddress({ ...rest });
-      await setUserAddress(rest, "laskdjflasf");
+      setAddress({ ...values });
+      if (values.rememberAdress) {
+        await setUserAddress(rest, userId!);
+        formik.resetForm({
+          values: {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            address: values.address,
+            address2: values.address2,
+            postalCode: values.postalCode,
+            city: values.city,
+            country: values.country,
+            phoneNumber: values.phoneNumber,
+            rememberAdress: values.rememberAdress,
+          },
+        });
+      }
     },
   });
 
@@ -105,7 +117,10 @@ export const FormAndress = ({ countries }: Props) => {
           id="firstName"
           name="firstName"
           type="text"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, firstName: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.firstName}
         />
@@ -125,7 +140,10 @@ export const FormAndress = ({ countries }: Props) => {
           id="lastName"
           name="lastName"
           type="text"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, lastName: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.lastName}
         />
@@ -145,7 +163,10 @@ export const FormAndress = ({ countries }: Props) => {
           id="address"
           name="address"
           type="text"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, address: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.address}
         />
@@ -163,7 +184,10 @@ export const FormAndress = ({ countries }: Props) => {
           id="address2"
           name="address2"
           type="text"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, address2: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.address2}
         />
@@ -179,7 +203,10 @@ export const FormAndress = ({ countries }: Props) => {
           id="postalCode"
           name="postalCode"
           type="text"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, postalCode: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.postalCode}
         />
@@ -199,7 +226,10 @@ export const FormAndress = ({ countries }: Props) => {
           id="city"
           name="city"
           type="text"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, city: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.city}
         />
@@ -218,7 +248,10 @@ export const FormAndress = ({ countries }: Props) => {
           })}
           id="country"
           name="country"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, country: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.country}
         >
@@ -245,7 +278,10 @@ export const FormAndress = ({ countries }: Props) => {
           })}
           id="phoneNumber"
           name="phoneNumber"
-          onChange={formik.handleChange}
+          onChange={(event) => {
+            formik.handleChange(event);
+            setAddress({ ...formik.values, phoneNumber: event.target.value });
+          }}
           onBlur={formik.handleBlur}
           value={formik.values.phoneNumber}
         />
@@ -298,7 +334,7 @@ export const FormAndress = ({ countries }: Props) => {
             "btn-primary": formik.isValid,
             "btn-secondary": !formik.isValid && !formik.dirty,
           })}
-          disabled={formik.isValid && !formik.dirty}
+          disabled={!formik.isValid && !formik.dirty}
         >
           Siguiente
         </button>
