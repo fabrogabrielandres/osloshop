@@ -15,6 +15,7 @@ async function Main() {
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.countrys.deleteMany();
+  await prisma.addressUser.deleteMany();
   
   //insert Users
   await prisma.user.createMany({data:initialData.user})

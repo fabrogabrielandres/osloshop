@@ -1,9 +1,10 @@
 "use client";
-import { deleteUserAddress, setUserAddress } from "@/actions";
+import { deleteUserAddress, getUserAddress, setUserAddress } from "@/actions";
 import { auth } from "@/auth.config";
 import { Country } from "@/interfaces";
 import { useAdressStore } from "@/store";
 import clsx from "clsx";
+import { Address } from "cluster";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -29,9 +30,18 @@ export const FormAndress = ({ countries }: Props) => {
   const setAddress = useAdressStore((state) => state.setAddress);
   const address = useAdressStore((state) => state.address);
   const [load, setLoad] = useState(true);
-
   const user = useSession();
   const userId = user.data?.user.id;
+
+  useEffect(() => {
+    const userAddressDb = async (userId: string) => {
+      const addresFromDb = await getUserAddress({ userId: userId! });
+      setAddress({ ...addresFromDb });
+    };
+    userAddressDb(userId!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     setLoad(false);
     formik.resetForm({
@@ -47,6 +57,7 @@ export const FormAndress = ({ countries }: Props) => {
         rememberAdress: false,
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
   const formik = useFormik<FormAdressImput>({

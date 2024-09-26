@@ -1,3 +1,4 @@
+export * from "./address/getUserAddress";
 export * from "./address/deleteUserAddress";
 export * from "./address/setUserAddress";
 export * from "./country/get-countrys";
