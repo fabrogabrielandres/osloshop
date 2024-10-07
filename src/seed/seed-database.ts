@@ -7,15 +7,20 @@ async function Main() {
 
   const { categories,products,user } = initialData
   
+  await prisma.addressUser.deleteMany();
+
+
   //delete all users previus
   await prisma.user.deleteMany();
   
   //delete all registers previus
   await prisma.procutImage.deleteMany();
+  await prisma.producStock.deleteMany();
+
+
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
   await prisma.countrys.deleteMany();
-  await prisma.addressUser.deleteMany();
   
   //insert Users
   await prisma.user.createMany({data:initialData.user})
@@ -34,9 +39,15 @@ async function Main() {
     return map;
   }, {} as Record<string, string>);
 
-  //insert products and Images
+  //insert products , productStock and Images
   products.forEach(async (product) => {
-    let { images, type, ...rest } = product;
+
+    let { images, type, stockPerType, ...rest } = product;
+
+    const mapSizes = Object.keys(stockPerType)
+    console.log(mapSizes);
+    
+
     const productToInsert = {
       ...rest,
       categoryId: categoriesMap[product.type],
@@ -56,6 +67,18 @@ async function Main() {
     await prisma.procutImage.createMany({
       data: dataToCreateImageInDb,
     });
+
+
+    const dataToCreateStockInDb = {...stockPerType, producStockId: productFromDb.id }
+
+    // console.log("dataToCreateStockInDb",dataToCreateStockInDb);
+    
+
+    await prisma.producStock.createMany({
+      data:dataToCreateStockInDb
+    })
+
+
   });
  
   await prisma.countrys.createMany({ data: countriesSeed });
