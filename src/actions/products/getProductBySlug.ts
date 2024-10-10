@@ -11,6 +11,20 @@ export const getProductBySlug = async (slug: string) => {
             url: true,
           },
         },
+        producStock:{
+          select: {
+          producStockId:false,
+          product:false,
+          id:true,
+          S:true,
+          XS:true,
+          L:true,
+          M:true,
+          XL:true,
+          XXL:true,
+          XXXL:true,
+          }
+        }
       },
       where: {
         slug: slug,
@@ -22,6 +36,8 @@ export const getProductBySlug = async (slug: string) => {
     const images = productPrisma?.ProcutImage.map((url) => url.url);
     const { ProcutImage, ...rest } = productPrisma;
     const productParce = { ...rest, images };
+    console.log("productParce",productParce);
+    
     return productParce;
   } catch (error) {
     throw new Error(`No se pudo cargar los productos ${error}`);

@@ -2,6 +2,7 @@
 
 import { getStockBySlug } from "@/actions/products/get_Stock_By_Slug";
 import { titleFont } from "@/config/fonts";
+import { ProductStock } from "@/interfaces";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -10,18 +11,22 @@ interface Props {
 
 export const StockLabel = ({ slug }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [stock, setStock] = useState(0);
+  const [detail, setDetail] = useState<Array<any>>([]);
 
   const getStock = async () => {
     const stock = await getStockBySlug(slug);
-    setStock(stock);
-    setIsLoading(false)
+
+    let stockMap = Object.entries(stock!)
+      .filter((product) => product[0] !== "id")
+      .filter((product) => product[0] !== "producStockId");
+    setDetail(stockMap);
+    setIsLoading(false);
   };
-  
+
   useEffect(() => {
     getStock();
-
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -32,9 +37,24 @@ export const StockLabel = ({ slug }: Props) => {
           &nbsp;
         </h1>
       ) : (
-        <h1 className={` ${titleFont.className} antialiased font-bold text-lg`}>
-          Stock: {stock}
-        </h1>
+        // <div className="grid grid-cols-2 gap-1">
+        <div>
+          <h1
+            className={` ${titleFont.className} antialiased font-bold text-lg underline decoration-solid `}
+          >
+            Stock:
+          </h1>
+          {detail
+            .filter((zise) => zise[1] != 0)
+            .map((product) => {
+              return (
+                <div key={product[0]}>
+                  <span>{`${product[0]} : ${product[1]}`} </span>
+                  <br></br>
+                </div>
+              );
+            })}
+        </div>
       )}
     </>
   );

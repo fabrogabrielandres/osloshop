@@ -2,12 +2,9 @@
 
 import { sleep } from "@/utils";
 import prisma from "@/lib/prisma";
+import { ProductStock } from "@/interfaces";
 
-interface Props{
-    number:number
-}
-
-export const getStockBySlug = async (slug: string): Promise<number> => {
+export const getStockBySlug = async (slug: string):Promise<ProductStock | null> => {
   try {
     // await sleep(2)
     const stock = await prisma.product.findUnique({
@@ -15,11 +12,15 @@ export const getStockBySlug = async (slug: string): Promise<number> => {
         slug: slug,
       },
       select: {
-        inStock: true,
+        producStock: true,
       },
     });
-    return stock?.inStock ?? 0;
+
+    const producStock =stock?.producStock;
+    
+    
+    return producStock!;
   } catch (error) {
-    return 0;
+    return null;
   }
 };

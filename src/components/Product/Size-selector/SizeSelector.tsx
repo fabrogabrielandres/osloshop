@@ -1,4 +1,3 @@
-
 import type { Size } from "@/interfaces";
 import clsx from "clsx";
 
@@ -8,7 +7,11 @@ interface Props {
   changeSize: (size: Size) => void;
 }
 
-export const SizeSelector = ({ selectedSize, availableSizes, changeSize }: Props) => {
+export const SizeSelector = ({
+  selectedSize,
+  availableSizes,
+  changeSize,
+}: Props) => {
   return (
     <div className="my-5">
       <h3 className="font-bold mb-4">Tallas disponibles</h3>
