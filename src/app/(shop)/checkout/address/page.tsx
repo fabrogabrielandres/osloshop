@@ -1,6 +1,6 @@
 export const revalidate = 0;
 import { Title } from "@/components";
-import { FormAndress } from "../Ui/FormAndress";
+import { FormAndress } from "./Ui/FormAndress";
 import { getCountries } from "@/actions";
 
 export default async function AddressPage() {

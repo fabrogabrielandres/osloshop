@@ -1,14 +1,12 @@
 "use client";
 import { deleteUserAddress, getUserAddress, setUserAddress } from "@/actions";
-import { auth } from "@/auth.config";
 import { Country } from "@/interfaces";
 import { useAdressStore } from "@/store";
 import clsx from "clsx";
-import { Address } from "cluster";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 
 interface FormAdressImput {
@@ -32,6 +30,8 @@ export const FormAndress = ({ countries }: Props) => {
   const [load, setLoad] = useState(true);
   const user = useSession();
   const userId = user.data?.user.id;
+
+  const router = useRouter();
 
   useEffect(() => {
     const userAddressDb = async (userId: string) => {
@@ -108,8 +108,10 @@ export const FormAndress = ({ countries }: Props) => {
             rememberAdress: values.rememberAdress,
           },
         });
+        router.push("/checkout");
       } else {
         await deleteUserAddress({ userId: userId! });
+        router.push("/checkout");
       }
     },
   });
