@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 
-import { placeOrder } from "@/actions";
+// import { placeOrder } from "@/actions";
 import { useAdressStore, useCartProductStore } from "@/store";
 import { currencyFormat } from "@/utils";
 
@@ -37,16 +37,16 @@ export const PlaceOrder = () => {
     }));
 
     //! Server Action
-    const resp = await placeOrder(productsToOrder, address);
-    if (!resp.ok) {
-      setIsPlacingOrder(false);
-      setErrorMessage(resp.message);
-      return;
-    }
+    // const resp = await placeOrder(productsToOrder, address);
+    // if (!resp.ok) {
+    //   setIsPlacingOrder(false);
+    //   setErrorMessage(resp.message);
+    //   return;
+    // }
 
-    //* Todo salio bien!
-    clearCart();
-    router.replace("/orders/" + resp.order?.id);
+    // //* Todo salio bien!
+    // clearCart();
+    // router.replace("/orders/" + resp.order?.id);
   };
 
   if (!loaded) {

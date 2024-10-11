@@ -1,10 +1,8 @@
 "use client";
 
-import { QuantitySelector } from "@/components";
 import { useCartProductStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export const ProductsCheckOut = () => {

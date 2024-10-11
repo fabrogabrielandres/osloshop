@@ -7,7 +7,13 @@ export interface CartProductActions {
   getTotalItems: () => number;
   updateProductQuantity: (product: CartProduct, quantity: number) => void;
   removeProduct: (product: CartProduct) => void;
-  getSummaryInformation: () => { subTotal: number; tax: number; total: number; itemsInCart: number;};
+  getSummaryInformation: () => {
+    subTotal: number;
+    tax: number;
+    total: number;
+    itemsInCart: number;
+  };
+  clearCart: () => void;
 }
 
 export interface StateCart {
@@ -84,6 +90,9 @@ export const cartProductSlice: StateCreator<
       total,
       itemsInCart,
     };
+  },
+  clearCart: () => {
+    return;
   },
 });
 
