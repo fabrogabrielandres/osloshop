@@ -7,7 +7,6 @@ interface Props {
   userId: string;
 }
 export const getUserAddress = async ({ userId }: Props): Promise<Address> => {
-  console.error("server action ", userId);
 
   const userEmpty: Address = {
     address: "",

@@ -6,7 +6,8 @@ import clsx from "clsx";
 
 // import { placeOrder } from "@/actions";
 import { useAdressStore, useCartProductStore } from "@/store";
-import { currencyFormat } from "@/utils";
+import { currencyFormat, sleep } from "@/utils";
+import { placeOrder } from "@/actions/order/place-order";
 
 export const PlaceOrder = () => {
   const router = useRouter();
@@ -28,7 +29,6 @@ export const PlaceOrder = () => {
 
   const onPlaceOrder = async () => {
     setIsPlacingOrder(true);
-    // await sleep(2);
 
     const productsToOrder = cart.map((product) => ({
       productId: product.id,
@@ -36,13 +36,16 @@ export const PlaceOrder = () => {
       size: product.size,
     }));
 
-    //! Server Action
-    // const resp = await placeOrder(productsToOrder, address);
-    // if (!resp.ok) {
-    //   setIsPlacingOrder(false);
-    //   setErrorMessage(resp.message);
-    //   return;
-    // }
+    // ! Server Action
+    const resp = await placeOrder(productsToOrder, address);
+    console.log("llgue",resp);
+    
+    if (!resp?.ok) {
+      setIsPlacingOrder(false);
+      setErrorMessage(resp!.message);
+      return;
+    }
+
 
     // //* Todo salio bien!
     // clearCart();

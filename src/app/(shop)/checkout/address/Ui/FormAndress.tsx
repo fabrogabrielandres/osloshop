@@ -1,5 +1,6 @@
 "use client";
-import { deleteUserAddress, getUserAddress, setUserAddress } from "@/actions";
+import { deleteUserAddress,  setUserAddress } from "@/actions";
+import { getUserAddress } from "@/actions/address/getUserAddress";
 import { Country } from "@/interfaces";
 import { useAdressStore } from "@/store";
 import clsx from "clsx";
