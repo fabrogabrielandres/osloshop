@@ -107,27 +107,7 @@ export const placeOrder = async (
       // 2. Crear la orden - Encabezado - Detalles
 
       
-      const datatosen = {
-        userId: userId,
-        itemsInOrder: itemsInOrder,
-        subTotal: subTotal,
-        tax: tax,
-        total: total,
-
-        OrderItem: {
-          createMany: {
-            data: productsToOrder.map((p) => ({
-              quantity: p.quantity,
-              size: p.size,
-              productId: p.productId,
-              price:
-                products.find((product) => product.id === p.productId)?.price ??
-                0,
-            })),
-          },
-        },
-      };
-
+  
       const order = await tx.order.create({
         data: {
           userId: userId,
