@@ -1,6 +1,6 @@
 "use client";
 import { QuantitySelector, SizeSelector } from "@/components";
-import { CartProduct, Product, Size } from "@/interfaces";
+import { CartProduct, Product, ProductStock, Size } from "@/interfaces";
 import { useCartProductStore } from "@/store";
 import { clsx } from "clsx";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export const AddToCart = ({ product }: Props) => {
     } else {
       setDisableByStock(false);
     }
-  }, [size, quantity]);
+  }, [size, quantity, producStock]);
 
   const addToCart = () => {
     setPosted(true);

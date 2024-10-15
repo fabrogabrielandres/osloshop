@@ -92,7 +92,7 @@ export const cartProductSlice: StateCreator<
     };
   },
   clearCart: () => {
-    return;
+    set({cart:[]} ,false, "clearCart")
   },
 });
 

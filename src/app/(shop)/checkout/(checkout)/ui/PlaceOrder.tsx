@@ -48,8 +48,8 @@ export const PlaceOrder = () => {
 
 
     // //* Todo salio bien!
-    // clearCart();
-    // router.replace("/orders/" + resp.order?.id);
+    clearCart();
+    router.replace("/orders/" + resp.order?.id);
   };
 
   if (!loaded) {

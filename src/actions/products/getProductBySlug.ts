@@ -36,7 +36,6 @@ export const getProductBySlug = async (slug: string) => {
     const images = productPrisma?.ProcutImage.map((url) => url.url);
     const { ProcutImage, ...rest } = productPrisma;
     const productParce = { ...rest, images };
-    console.log("productParce",productParce);
     
     return productParce;
   } catch (error) {

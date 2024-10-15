@@ -17,7 +17,6 @@ export const placeOrder = async (
   const session = await auth();
   const userId = session?.user.id;
 
-
   // validate user session
   if (!userId) {
     return {
@@ -73,41 +72,40 @@ export const placeOrder = async (
     { subTotal: 0, tax: 0, total: 0 }
   );
 
-
   // Crear la transacción de base de datos
   try {
     const prismaTx = await prisma.$transaction(async (tx) => {
-      // // 1. Actualizar el stock de los productos
-      // const updatedProductsPromises = productsToOrder.map((productOrder) => {
-
-      //   // Verificar valores negativos en las existencia = no hay stock
-      //   let productTovalidate = products.filter((p)=> p.id == productOrder.productId)[0].producStock![productOrder.size];
-
-      //   if (productOrder.quantity === 0 || ( productTovalidate -  productOrder.quantity < 0) ) {
-      //     throw new Error(`${productOrder.productId} no tiene cantidad definida`);
-      //   }
-
-      //   return tx.product.update({
-      //     where: { id: productOrder.productId },
-      //     data: {
-      //       producStock: {
-      //         update: {
-      //           [productOrder.size]: {
-      //             decrement: productOrder.quantity,
-      //           },
-      //         },
-      //       },
-      //     },
-      //   });
-      // });
-      // // throw new Error(`${""} no tiene cantidad definida`);
-
-      // const updatedProducts = await Promise.all(updatedProductsPromises);
-
+      // 1. Actualizar el stock de los productos
+      const updatedProductsPromises = productsToOrder.map((productOrder) => {
+        // Verificar valores negativos en las existencia = no hay stock
+        let productTovalidate = products.filter(
+          (p) => p.id == productOrder.productId
+        )[0].producStock![productOrder.size];
+        if (
+          productOrder.quantity === 0 ||
+          productTovalidate - productOrder.quantity < 0
+        ) {
+          throw new Error(
+            `${productOrder.productId} no tiene cantidad definida`
+          );
+        }
+        return tx.product.update({
+          where: { id: productOrder.productId },
+          data: {
+            producStock: {
+              update: {
+                [productOrder.size]: {
+                  decrement: productOrder.quantity,
+                },
+              },
+            },
+          },
+        });
+      });
+      // throw new Error(`${""} no tiene cantidad definida`);
+      const updatedProducts = await Promise.all(updatedProductsPromises);
       // 2. Crear la orden - Encabezado - Detalles
 
-      
-  
       const order = await tx.order.create({
         data: {
           userId: userId,
@@ -115,7 +113,6 @@ export const placeOrder = async (
           subTotal: subTotal,
           tax: tax,
           total: total,
-
 
           OrderItem: {
             createMany: {
@@ -131,34 +128,33 @@ export const placeOrder = async (
           },
         },
       });
-      console.log("order*******************", order);
-
       // Validar, si el price es cero, entonces, lanzar un error
-
-      // 3. Crear la direccion de la orden
-      // Address
-      // const { country, ...restAddress } = address;
-      // const orderAddress = await tx.orderAddress.create({
-      //   data: {
-      //     ...restAddress,
-      //     countryId: country,
-      //     orderId: order.id,
-      //   },
-      // });
-
+      // 3. Crear la direccion de la orden Address
+      const { country, ...restAddress } = address;
+      const orderAddress = await tx.orderAddress.create({
+        data: {
+          firstName: address.firstName,
+          lastName: address.lastName,
+          address: address.address,
+          address2: address.address2,
+          postalCode: address.postalCode,
+          city: address.city,
+          phoneNumber: address.phoneNumber,
+          countryId: country,
+          orderId: order.id,
+        },
+      });
+      
       return {
-        // updatedProducts: updatedProducts,
+        updatedProducts: updatedProducts,
         order: order,
-        // orderAddress: orderAddress,
+        orderAddress: orderAddress,
       };
     });
-
-    console.log("prismaTx", prismaTx);
-
     return {
-      // ok: true,
+      ok: true,
       order: prismaTx.order,
-      // prismaTx: prismaTx,
+      prismaTx: prismaTx,
     };
   } catch (error: any) {
     return {

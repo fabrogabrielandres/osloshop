@@ -11,7 +11,7 @@ export interface Product {
   tags: string[];
   title: string;
   gender: Categorie;
-  producStock?:ProductStock
+  producStock:ProductStock | null
 }
 
 export interface CartProduct {
@@ -35,6 +35,7 @@ export interface ProductStock {
   XXXL?: number;
   producStockId?: string;
 }
+
 
 export type Categorie = "men" | "women" | "kid" | "unisex";
 export type Size = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";
