@@ -1,6 +1,6 @@
 "use client";
 import { QuantitySelector, SizeSelector } from "@/components";
-import { CartProduct, Product, ProductStock, Size } from "@/interfaces";
+import type { CartProduct, Product, ProductStock, Size } from "@/interfaces";
 import { useCartProductStore } from "@/store";
 import { clsx } from "clsx";
 import { useEffect, useState } from "react";
@@ -9,7 +9,9 @@ interface Props {
   product: Product;
 }
 export const AddToCart = ({ product }: Props) => {
-  const { sizes, id, images, price, slug, title, producStock } = product;
+  const {  id, images, price, slug, title, producStock } = product;
+  const sizesmap= Object.entries({...producStock}).filter((product) => product[0] !== "id").filter((product) => product[0] !== "producStockId").filter((product) => Number(product[1]) > 0 ).map(product=>(product[0] as Size))
+   
   const [size, setSize] = useState<Size | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
@@ -21,7 +23,7 @@ export const AddToCart = ({ product }: Props) => {
 
   const changeSize = (size: Size) => {
     setSize(size);
-    setQuantity(0);
+    setQuantity(1);
   };
 
   const onQuantityChange = (quantity: number) => {
@@ -31,7 +33,7 @@ export const AddToCart = ({ product }: Props) => {
   useEffect(() => {
     if (!size) return;
     if (!producStock) return;
-    if ((producStock as any)[size] <= quantity) {
+    if ( producStock[size]! <= quantity) {
       setDisableByStock(true);
     } else {
       setDisableByStock(false);
@@ -67,7 +69,7 @@ export const AddToCart = ({ product }: Props) => {
       {/* Selector de Tallas */}
       <SizeSelector
         selectedSize={size}
-        availableSizes={sizes}
+        availableSizes={sizesmap}
         changeSize={changeSize}
       />
 

@@ -33,8 +33,6 @@ export default function orderIdPage( { params }: Props ) {
   // Todo: verificar
   // redirect(/)
 
-
-
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
 
