@@ -6,12 +6,8 @@ import Image from "next/image";
 import clsx from "clsx";
 import { IoCardOutline } from "react-icons/io5";
 import { getItemByOrder } from "@/actions/order/getOrderById";
+import { redirect } from "next/navigation";
 
-const productsInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-];
 
 interface Props {
   params: {
@@ -22,16 +18,12 @@ interface Props {
 export default async function orderIdPage({ params }: Props) {
   const { id } = params;
 
-  const orderToParce = await getItemByOrder({ id: id });
-  const order = { ...orderToParce.order?.flat()[0] };
+  const { order, ok} = await getItemByOrder({ id: id });
+  
 
-  // console.log("desde el server order",order.OrderItem!.at(0)?.product);
-  // console.log("desde el server order",order.OrderItem!.at(0));
-  console.log("desde el server order",order)
-
-  // Todo: verificar
-  // redirect(/)
-
+  if (!ok || !order) {
+    redirect("/");
+  }
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
       <div className="flex flex-col w-[1000px]">

@@ -19,7 +19,7 @@ export const getItemByOrder = async ({ id }: Props) => {
   }
 
   try {
-    const order = await prisma.order.findMany({
+    const order = await prisma.order.findUnique({
       where: {
         id: id,
       },
@@ -51,7 +51,7 @@ export const getItemByOrder = async ({ id }: Props) => {
     
 
     if ( session.user.role === 'user' ) {
-      if ( session.user.id !== order[0].userId ) {
+      if ( session.user.id !== order.userId ) {
         throw `${ id } no es de ese usuario`
       }
     }
