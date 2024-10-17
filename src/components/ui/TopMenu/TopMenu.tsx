@@ -18,7 +18,9 @@ export const TopMenu = () => {
     setload(false);
   }, []);
 
-  return (
+  return load ? (
+    "loading..."
+  ) : (
     <div className="relative bg-blend-screen">
       <nav className="flex px-5 justify-between items-center w-full ">
         {/* Logo */}
@@ -60,7 +62,7 @@ export const TopMenu = () => {
           </Link>
 
           <Link
-            href={(totalItemsIncart == 0 && !load) ? "/empty" : "/cart"}
+            href={totalItemsIncart == 0 && !load ? "/empty" : "/cart"}
             className="mx-2"
           >
             <div className="relative">
