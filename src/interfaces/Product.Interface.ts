@@ -11,7 +11,7 @@ export interface Product {
   tags: string[];
   title: string;
   gender: Categorie;
-  producStock:ProductStock | null
+  producStock?:ProductStock | null
 }
 
 export interface CartProduct {
