@@ -112,15 +112,6 @@ export default function NewAccountPage() {
           Crear cuenta
         </button>
 
-        <span>
-          Es disable{" "}
-          {JSON.stringify(
-            !!formik.errors.email ||
-              !!formik.errors.name ||
-              !!formik.errors.password
-          )}
-        </span>
-
         {/* divisor l ine */}
         <div className="flex items-center my-5">
           <div className="flex-1 border-t border-gray-500"></div>
