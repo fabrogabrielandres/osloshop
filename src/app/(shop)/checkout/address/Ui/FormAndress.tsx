@@ -1,5 +1,5 @@
 "use client";
-import { deleteUserAddress,  setUserAddress } from "@/actions";
+import { deleteUserAddress, setUserAddress } from "@/actions";
 import { getUserAddress } from "@/actions/address/getUserAddress";
 import { Country } from "@/interfaces";
 import { useAdressStore } from "@/store";
@@ -118,10 +118,9 @@ export const FormAndress = ({ countries }: Props) => {
   });
 
   return load === true ? (
-    <span>{JSON.stringify(address)}</span>
+    <span>loading</span>
   ) : (
     <div className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2">
-      <span>{JSON.stringify(address)}</span>
       <div className="flex flex-col mb-2">
         <span>Nombres</span>
         <input

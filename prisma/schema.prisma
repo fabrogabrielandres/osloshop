@@ -134,6 +134,7 @@ model Order {
   // Relaciones
   user   User   @relation(fields: [userId], references: [id])
   userId String
+  transactionId String?
 
   OrderItem    OrderItem[]
   OrderAddress OrderAddress?

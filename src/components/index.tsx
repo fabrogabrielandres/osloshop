@@ -1,3 +1,5 @@
+export * from "./Orders/OrderStatus";
+export * from "./Paypal/PayPalButton";
 export * from "./Product/StockLabel/StockLabel ";
 export * from "./ui/pagination/Pagination";
 export * from "./ui/Footer/Footer";
@@ -9,7 +11,6 @@ export * from "./Product/Size-selector/QuantitySelector/QuantitySelector";
 export * from "./Product/Size-selector/SizeSelector";
 export * from "./Title/Title";
 export * from "./ui/not-found/PageNotFound";
-
 
 
 
