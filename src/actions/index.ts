@@ -1,3 +1,6 @@
+export * from "./user/change-User-role";
+export * from "./user/paginate-users";
+export * from "./order/getPaginatedOrders";
 export * from "./payment/setTransactionIdMyDb";
 export * from "./address/getUserAddress";
 export * from "./address/deleteUserAddress";

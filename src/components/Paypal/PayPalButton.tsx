@@ -1,8 +1,13 @@
 "use client";
 
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import { CreateOrderData, CreateOrderActions, OnApproveActions, OnApproveData, } from "@paypal/paypal-js";
-import { setTransactionIdMyDb } from '@/actions';
+import {
+  CreateOrderData,
+  CreateOrderActions,
+  OnApproveActions,
+  OnApproveData,
+} from "@paypal/paypal-js";
+import { setTransactionIdMyDb } from "@/actions";
 import { paypalCheckPayment } from "@/actions/payment/paypal-check-payment";
 
 interface Props {
@@ -12,7 +17,6 @@ interface Props {
 
 export const PayPalButton = ({ orderId, amount }: Props) => {
   const [{ isPending }] = usePayPalScriptReducer();
-
 
   const rountedAmount = String(Math.round(amount * 100) / 100); //123.23
 
@@ -25,7 +29,10 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
     );
   }
 
-  const createOrder = async ( data: CreateOrderData, actions: CreateOrderActions): Promise<string> => {
+  const createOrder = async (
+    data: CreateOrderData,
+    actions: CreateOrderActions
+  ): Promise<string> => {
     const transactionId = await actions.order.create({
       purchase_units: [
         {
@@ -39,28 +46,25 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
       intent: "CAPTURE",
     });
 
-    const { ok } = await setTransactionIdMyDb( orderId, transactionId );
-    if ( !ok ) {
-      throw new Error('No se pudo actualizar la orden');
+    const { ok } = await setTransactionIdMyDb(orderId, transactionId);
+    if (!ok) {
+      throw new Error("No se pudo actualizar la orden");
     }
     console.log("transactionId:", transactionId);
 
     return transactionId;
   };
 
-  const onApprove = async(data: OnApproveData, actions: OnApproveActions) => {
-
+  const onApprove = async (data: OnApproveData, actions: OnApproveActions) => {
     const details = await actions.order?.capture();
-    if ( !details ) return;
-    
-    await paypalCheckPayment( details.id! );
+    if (!details) return;
 
-  }
+    await paypalCheckPayment(details.id!);
+  };
 
   return (
-    <PayPalButtons
-      createOrder={createOrder}
-      onApprove={ onApprove }
-    />
+    <div className="relative z-0">
+      <PayPalButtons createOrder={createOrder} onApprove={onApprove} />
+    </div>
   );
 };
