@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product?.title ?? "Producto no encontrado",
       description: product?.description ?? "",
       // images: [], // https://tttttttttttyyyyyyyyyyyyy.com/products/image.png
-      images: [`/products/${product?.images[1]}`],
+      images: [`/products/${product?.images[1].url}`],
     },
   };
 }

@@ -32,7 +32,7 @@ export default async function ProductPage({ params }: Props) {
       <span>hola</span>
       <Title title={ title } />
 
-      <ProductForm product={ product! ?? {} }  />
+      <ProductForm product={ product! ?? {} } categories={ categories } />
     </>
   );
 }

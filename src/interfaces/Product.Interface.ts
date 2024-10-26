@@ -3,7 +3,7 @@ import { number } from "zod";
 export interface Product {
   id: string;
   description: string;
-  images: string[];
+  images: Array<ImageInProduct>;
   inStock: number;
   price: number;
   sizes: Size[];
@@ -11,7 +11,12 @@ export interface Product {
   tags: string[];
   title: string;
   gender: Categorie;
-  producStock?:ProductStock | null
+  producStock?: ProductStock | null;
+}
+
+export interface ImageInProduct {
+  id?: any | null;
+  url?: string | null;
 }
 
 export interface CartProduct {
@@ -19,7 +24,7 @@ export interface CartProduct {
   slug: string;
   title: string;
   price: number;
-  quantity:number;
+  quantity: number;
   size: Size;
   image: string;
 }
@@ -35,7 +40,6 @@ export interface ProductStock {
   XXXL?: number;
   producStockId?: string;
 }
-
 
 export type Categorie = "men" | "women" | "kid" | "unisex";
 export type Size = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";

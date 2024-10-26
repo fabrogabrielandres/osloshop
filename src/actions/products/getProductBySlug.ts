@@ -9,22 +9,23 @@ export const getProductBySlug = async (slug: string) => {
         ProcutImage: {
           select: {
             url: true,
+            id: true,
           },
         },
-        producStock:{
+        producStock: {
           select: {
-          producStockId:false,
-          product:false,
-          id:true,
-          S:true,
-          XS:true,
-          L:true,
-          M:true,
-          XL:true,
-          XXL:true,
-          XXXL:true,
-          }
-        }
+            producStockId: false,
+            product: false,
+            id: true,
+            S: true,
+            XS: true,
+            L: true,
+            M: true,
+            XL: true,
+            XXL: true,
+            XXXL: true,
+          },
+        },
       },
       where: {
         slug: slug,
@@ -32,11 +33,14 @@ export const getProductBySlug = async (slug: string) => {
     });
 
     if (!productPrisma) return null;
+    console.log("desde el product byslug", productPrisma.ProcutImage);
 
-    const images = productPrisma?.ProcutImage.map((url) => url.url);
+    const images = productPrisma?.ProcutImage.map(({ url, id }) => {
+      return { url, id };
+    });
     const { ProcutImage, ...rest } = productPrisma;
     const productParce = { ...rest, images };
-    
+
     return productParce;
   } catch (error) {
     throw new Error(`No se pudo cargar los productos ${error}`);
