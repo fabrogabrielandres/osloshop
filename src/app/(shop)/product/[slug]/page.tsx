@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AddToCart } from "./ui";
 import { titleFont } from "@/config/fonts";
-import { getProductBySlug } from "@/actions/products/getProductBySlug";
+import { getProductBySlug } from "@/actions";
 
 interface Props {
   params: {
