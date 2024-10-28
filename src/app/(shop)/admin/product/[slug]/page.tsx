@@ -29,7 +29,6 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <span>hola</span>
       <Title title={ title } />
 
       <ProductForm product={ product! ?? {} } categories={ categories } />

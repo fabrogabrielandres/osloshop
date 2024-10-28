@@ -26,7 +26,7 @@ export interface CartProduct {
   price: number;
   quantity: number;
   size: Size;
-  image: string;
+  image: string | ImageInProduct;
 }
 
 export interface ProductStock {

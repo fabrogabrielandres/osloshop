@@ -1,6 +1,7 @@
 "use client";
 
 import { ImageInProduct, Product, ProductStock } from "@/interfaces";
+import { Size } from "@prisma/client";
 import clsx from "clsx";
 import { useFormik } from "formik";
 import Image from "next/image";
@@ -22,7 +23,7 @@ interface FormAdressImput {
   price: number;
   tags: string;
   gender: string;
-  images?:Array<ImageInProduct>
+  images?: Array<ImageInProduct>;
   // producStock?: ProductStock;
 
   // sizes: Size[];
@@ -45,9 +46,14 @@ export const ProductForm = ({ product, categories }: Props) => {
       slug: product.title,
       description: product.description,
       price: product.price,
-      tags: product.tags.join(","),
+      tags: product.tags?.join(",") || [] || "",
       gender: product.gender,
-      
+      XS: product.producStock?.XS,
+      S: product.producStock?.S,
+      M: product.producStock?.M,
+      L: product.producStock?.L,
+      XL: product.producStock?.XL,
+      XXL: product.producStock?.XXL,
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -62,6 +68,24 @@ export const ProductForm = ({ product, categories }: Props) => {
       price: Yup.number().required("Required"),
       tags: Yup.string().required("Required"),
       gender: Yup.string().required("Required"),
+      XS: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
+      S: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
+      M: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
+      L: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
+      XL: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
+      XXL: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
     }),
     onSubmit: async (values) => {
       console.log("hola", values);
@@ -76,7 +100,6 @@ export const ProductForm = ({ product, categories }: Props) => {
     <div className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
       {/* Textos */}
       <div className="w-full">
-        <div>{String(JSON.stringify(formik.values, null, 2))}</div>
         <div className="flex flex-col mb-2">
           <span>Título</span>
           <input
@@ -235,45 +258,60 @@ export const ProductForm = ({ product, categories }: Props) => {
           className="btn-primary w-full"
           onClick={() => {
             formik.submitForm();
-            console.log("hola");
           }}
         >
           Guardar
         </button>
-        
       </div>
 
       {/* Selector de tallas y fotos */}
       <div className="w-full">
-        <div className="flex flex-col mb-2">
-          <span>Inventario</span>
-          <input
-            type="number"
-            className="p-2 border rounded-md bg-gray-200"
-            // {...register("inStock", { required: true, min: 0 })}
-          />
-        </div>
-
         {/* As checkboxes */}
-        <div className="flex flex-col">
+        <div className="flex flex-col mb-2">
           <span>Tallas</span>
-          <div className="flex flex-wrap">
-            {sizes.map((size) => (
-              // bg-blue-500 text-white <--- si está seleccionado
-              <div
-                key={size}
-                // onClick={() => onSizeChanged(size)}
-                className={clsx(
-                  "p-2 border cursor-pointer rounded-md mr-2 mb-2 w-14 transition-all text-center",
-                  {
-                    // "bg-blue-500 text-white": getValues("sizes").includes(size),
-                  }
-                )}
-              >
-                <span>{size}</span>
+          {sizes.map((size) => (
+            <div
+              key={String(size)}
+              className={clsx(
+                "grid grid-cols-1 gap-2 p-2 border cursor-pointer rounded-md mr-2 mb-2 transition-all text-center",
+                {
+                  "border-red-500": formik.touched[size] && formik.errors[size],
+                }
+              )}
+            >
+              <div>
+                {`${size} ${(product.producStock as any)[size]} :`}
+                <input
+                  className={clsx(
+                    "ml-4 px-5 py-2 border bg-gray-200 rounded w-24",
+                    {
+                      "border-red-500":
+                        formik.touched[size] && formik.errors[size],
+                    }
+                  )}
+                  id={size}
+                  name={size}
+                  type="number"
+                  min={0}
+                  onChange={(event) => {
+                    formik.handleChange(event);
+                  }}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.size}
+                />
               </div>
-            ))}
-          </div>
+              <div
+                className={clsx({
+                  "text-red-500 mb-5 mt-2 border-red-500":
+                    formik.touched[size] && formik.errors[size],
+                })}
+              >
+                {formik.touched[size] && formik.errors[size]
+                  ? String(formik.errors[size])
+                  : null}
+              </div>
+            </div>
+          ))}
 
           <div className="flex flex-col mb-2">
             <span>Fotos</span>
@@ -287,7 +325,6 @@ export const ProductForm = ({ product, categories }: Props) => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
             {product.images?.map((image) => (
               <div key={image.id}>
                 <Image
