@@ -54,7 +54,6 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
 
   const deleteImage = async (id: number, url: string) => {
     setDisableButtons(true);
-    await sleep(5)
     await deleteProductImage(id, url);
     setDisableButtons(false);
   };
