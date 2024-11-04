@@ -10,6 +10,7 @@ export const getProductBySlug = async (slug: string) => {
           select: {
             url: true,
             id: true,
+            productId:true
           },
         },
         producStock: {
@@ -23,7 +24,7 @@ export const getProductBySlug = async (slug: string) => {
             M: true,
             XL: true,
             XXL: true,
-            XXXL: true,
+            XXXL:true
           },
         },
       },
@@ -33,7 +34,6 @@ export const getProductBySlug = async (slug: string) => {
     });
 
     if (!productPrisma) return null;
-    console.log("desde el product byslug", productPrisma.ProcutImage);
 
     const images = productPrisma?.ProcutImage.map(({ url, id }) => {
       return { url, id };

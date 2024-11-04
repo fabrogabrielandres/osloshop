@@ -1,5 +1,5 @@
 export const revalidate = 0;
-import { getCategories, getProductBySlug } from "@/actions";
+import { getAllSlugs, getCategories, getProductBySlug } from "@/actions";
 import { Title } from "@/components";
 import { redirect } from "next/navigation";
 import { ProductForm } from "./ui/ProductForm";
@@ -13,12 +13,12 @@ interface Props {
 export default async function ProductPage({ params }: Props) {
   const { slug } = params;
 
-  const [ product, categories ] = await Promise.all([
+  const [ product, categories, allSlugs ] = await Promise.all([
     getProductBySlug(slug),
-    getCategories()
+    getCategories(),
+    getAllSlugs()
   ]);
 
-  console.log("llegue", slug);
 
   // Todo: new
   if ( !product && slug !== 'new' ) {
@@ -31,7 +31,7 @@ export default async function ProductPage({ params }: Props) {
     <>
       <Title title={ title } />
 
-      <ProductForm product={ product! ?? {} } categories={ categories } />
+      <ProductForm product={ product! ?? {} } allSlugs={allSlugs} categories={ categories } />
     </>
   );
 }

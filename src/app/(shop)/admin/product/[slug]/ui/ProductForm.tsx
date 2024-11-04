@@ -1,21 +1,24 @@
 "use client";
 
-import { ImageInProduct, Product, ProductStock } from "@/interfaces";
-import { Size } from "@prisma/client";
+import { createUpdateProduct } from "@/actions";
+import { ProductImage } from "@/components";
+import { Product, ProductStock } from "@/interfaces";
 import clsx from "clsx";
-import { useFormik } from "formik";
-import Image from "next/image";
+import { FormikTouched, useFormik } from "formik";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
+import { unknown } from "zod";
 
 interface Props {
+  allSlugs: Array<{ slug: string }>;
   product: Product;
-  categories: Array<any>;
+  categories: Array<{ [key: string]: string }>;
 }
 
-const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const sizes: Array<string> = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
-interface FormAdressImput {
+interface FormImput {
   id?: string;
   title: string;
   slug: string;
@@ -23,51 +26,69 @@ interface FormAdressImput {
   price: number;
   tags: string;
   gender: string;
-  images?: Array<ImageInProduct>;
-  // producStock?: ProductStock;
-
-  // sizes: Size[];
-  producStock?: ProductStock | null;
-  // gender: Categorie;
+  XS: number;
+  S: number;
+  M: number;
+  L: number;
+  XL: number;
+  XXL: number;
+  XXXL: number;
+  categoryId: string;
+  images?: File[];
 }
 
-export const ProductForm = ({ product, categories }: Props) => {
+function deleteSpaceInString(value: string, originalValue: string) {
+  return value.trim();
+}
+
+export const ProductForm = ({ product, categories, allSlugs }: Props) => {
+  const router = useRouter();
+
+  const slugAllreadyInuse = allSlugs.map((slugs) => {
+    if (slugs.slug == product.slug) return;
+    return slugs.slug;
+  });
+
   const [load, setLoad] = useState(true);
   useEffect(() => {
     setLoad(false);
-    console.log("product", product!);
-    console.log("categories", categories);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const formik = useFormik<FormAdressImput | any>({
+  const formik = useFormik<FormImput>({
     initialValues: {
-      title: product.title,
-      slug: product.title,
-      description: product.description,
-      price: product.price,
-      tags: product.tags?.join(",") || [] || "",
+      title: product.title || "",
+      slug: product.slug || "",
+      description: product.description || "",
+      price: product.price || 0,
+      tags: product.tags?.join("") || "",
       gender: product.gender,
-      XS: product.producStock?.XS,
-      S: product.producStock?.S,
-      M: product.producStock?.M,
-      L: product.producStock?.L,
-      XL: product.producStock?.XL,
-      XXL: product.producStock?.XXL,
+      categoryId: product.categoryId!,
+      XS: product.producStock?.XS || 0,
+      S: product.producStock?.S || 0,
+      M: product.producStock?.M || 0,
+      L: product.producStock?.L || 0,
+      XL: product.producStock?.XL || 0,
+      XXL: product.producStock?.XXL || 0,
+      XXXL: product.producStock?.XXXL || 0,
+      images: undefined,
     },
     validationSchema: Yup.object({
       title: Yup.string()
-        .max(150, "Must be 15 characters or less")
+        .max(255, "Must be 255 characters or less")
         .required("Required"),
       slug: Yup.string()
-        .max(1500, "Must be 15 characters or less")
-        .required("Required"),
+        .transform(deleteSpaceInString)
+        .max(255, "Must be 255 characters or less")
+        .required("Required")
+        .notOneOf([...slugAllreadyInuse, "new"], "This Slug Allready in use"),
       description: Yup.string()
         .max(1500, "Must be 15 characters or less")
         .required("Required"),
       price: Yup.number().required("Required"),
       tags: Yup.string().required("Required"),
       gender: Yup.string().required("Required"),
+      categoryId: Yup.string().required("Required"),
       XS: Yup.number()
         .required("Required")
         .min(0, "Must be greater than or equal to 0"),
@@ -86,11 +107,81 @@ export const ProductForm = ({ product, categories }: Props) => {
       XXL: Yup.number()
         .required("Required")
         .min(0, "Must be greater than or equal to 0"),
+      XXXL: Yup.number()
+        .required("Required")
+        .min(0, "Must be greater than or equal to 0"),
     }),
-    onSubmit: async (values) => {
-      console.log("hola", values);
+    onSubmit: async (data) => {
+      console.log("subiendo", data);
+      const { images, ...productToSave } = data;
+      let dataTosabe: any = { ...productToSave };
+      console.log("images", images);
 
-      console.log("value", values);
+      dataTosabe.inStock = 0;
+      dataTosabe.categoryId = String(dataTosabe.categoryId);
+      dataTosabe.gender = productToSave.gender;
+      dataTosabe.sizes = sizes.join(",");
+      dataTosabe.id = product.id;
+
+
+      
+      // const uploadPromises = images!.map(async (image) => {
+      //   try {
+      //     const buffer = await image.arrayBuffer();
+      //     const base64Image = Buffer.from(buffer).toString("base64");
+          
+
+      //     return base64Image;
+      //   } catch (error) {
+      //     console.log(error);
+      //     return null;
+      //   }
+      // });
+
+      const buffer = await images![0].arrayBuffer();
+      const base64Image = Buffer.from(buffer).toString("base64");
+      console.log("ejemplo",base64Image);
+      
+      const files = [...images!]
+      
+      const uploadPromises = (files!).map(async(image:any) => {
+        try {
+          const buffer = await image.arrayBuffer();
+          const base64Image = Buffer.from(buffer).toString("base64");
+          console.log("buffer",buffer);
+          console.log("base64Image",base64Image);
+          
+
+          return base64Image;
+        } catch (error) {
+          console.log(error);
+          return null;
+        }
+      });
+      
+      const respo = await Promise.all(uploadPromises)
+
+      console.log("respo",respo);
+      
+
+
+
+      // const imageResp = await Promise.all(uploadPromises) 
+
+      // console.log("imageResp",imageResp);
+      
+
+
+
+      const responce = await createUpdateProduct(dataTosabe);
+
+      // alert(`${JSON.stringify(responce)}`);
+      if (!responce.ok) {
+        alert("noooooo");
+        return;
+      }
+
+      router.replace(`/admin/product/${responce.product?.slug}`);
     },
   });
 
@@ -99,6 +190,7 @@ export const ProductForm = ({ product, categories }: Props) => {
   ) : (
     <div className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
       {/* Textos */}
+      {/* <h1>{JSON.stringify(formik.values)}</h1> */}
       <div className="w-full">
         <div className="flex flex-col mb-2">
           <span>Título</span>
@@ -216,7 +308,18 @@ export const ProductForm = ({ product, categories }: Props) => {
 
         <div className="flex flex-col mb-2">
           <span>Gender</span>
-          <select className="p-2 border rounded-md bg-gray-200">
+          <select
+            className={clsx("px-5 py-2 border bg-gray-200 rounded", {
+              "border-red-500": formik.errors.gender && formik.touched.gender,
+            })}
+            id="gender"
+            name="gender"
+            onChange={(event) => {
+              formik.handleChange(event);
+            }}
+            onBlur={formik.handleBlur}
+            value={formik.values.gender}
+          >
             <option value="">[Seleccione]</option>
             <option value="men">Men</option>
             <option value="women">Women</option>
@@ -230,26 +333,26 @@ export const ProductForm = ({ product, categories }: Props) => {
           <select
             className={clsx("px-5 py-2 border bg-gray-200 rounded", {
               "border-red-500":
-                formik.errors.categories && formik.touched.categories,
+                formik.errors.categoryId && formik.touched.categoryId,
             })}
-            id="categories"
-            name="categories"
+            id="categoryId"
+            name="categoryId"
             onChange={(event) => {
               formik.handleChange(event);
             }}
             onBlur={formik.handleBlur}
-            value={formik.values.country}
+            value={formik.values.categoryId}
           >
             <option value="">[ Seleccione ]</option>
-            {categories.map(({ id, name }) => (
+            {categories.map(({ name, id }) => (
               <option key={id} value={id}>
                 {name}
               </option>
             ))}
           </select>
           <span className="text-red-500 mb-5 mt-2">
-            {formik.touched.categories && formik.errors.categories ? (
-              <div>{String(formik.errors.categories)}</div>
+            {formik.touched.categoryId && formik.errors.categoryId ? (
+              <div>{String(formik.errors.categoryId)}</div>
             ) : null}
           </span>
         </div>
@@ -269,24 +372,30 @@ export const ProductForm = ({ product, categories }: Props) => {
         {/* As checkboxes */}
         <div className="flex flex-col mb-2">
           <span>Tallas</span>
-          {sizes.map((size) => (
+          {sizes.map((size: any) => (
             <div
               key={String(size)}
               className={clsx(
-                "grid grid-cols-1 gap-2 p-2 border cursor-pointer rounded-md mr-2 mb-2 transition-all text-center",
+                "grid grid-cols-1 p-2 border cursor-pointer rounded-md mr-2 mb-2 transition-all text-center",
                 {
-                  "border-red-500": formik.touched[size] && formik.errors[size],
+                  // "border-red-500": formik.touched(size) && formik.errors?([size]),
                 }
               )}
             >
               <div>
-                {`${size} ${(product.producStock as any)[size]} :`}
+                {/* (obj as { [k in string]: any })[key] */}
+                {`${size} ${
+                  product.producStock?.[size as keyof ProductStock] || 0
+                }  :`}
                 <input
                   className={clsx(
                     "ml-4 px-5 py-2 border bg-gray-200 rounded w-24",
                     {
                       "border-red-500":
-                        formik.touched[size] && formik.errors[size],
+                        formik.touched[
+                          size as keyof FormikTouched<FormImput>
+                        ] &&
+                        formik.errors[size as keyof FormikTouched<FormImput>],
                     }
                   )}
                   id={size}
@@ -297,42 +406,49 @@ export const ProductForm = ({ product, categories }: Props) => {
                     formik.handleChange(event);
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.size}
+                  value={(formik.values as any)[size]}
                 />
               </div>
               <div
                 className={clsx({
                   "text-red-500 mb-5 mt-2 border-red-500":
-                    formik.touched[size] && formik.errors[size],
+                    formik.touched[size as keyof FormikTouched<FormImput>] &&
+                    formik.errors[size as keyof FormikTouched<FormImput>],
                 })}
               >
-                {formik.touched[size] && formik.errors[size]
-                  ? String(formik.errors[size])
-                  : null}
+                {/* {formik.touched[size as keyof FormikTouched<FormImput>] &&
+                formik.errors[size as keyof FormikTouched<FormImput>]
+                  ? formik.errors[size as keyof FormikTouched<FormImput>]
+                  : null} */}
               </div>
             </div>
           ))}
 
           <div className="flex flex-col mb-2">
             <span>Fotos</span>
-            {/* <input
+            <input
+              id={"images"}
+              name={"images"}
+              onBlur={formik.handleBlur}
+              onChange={(event) => {
+                formik.setFieldValue("images", event.currentTarget.files);
+              }}
               type="file"
-              { ...register('images') }
               multiple
               className="p-2 border rounded-md bg-gray-200"
               accept="image/png, image/jpeg, image/avif"
-            /> */}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {product.images?.map((image) => (
               <div key={image.id}>
-                <Image
+                <ProductImage
                   alt={product.title ?? ""}
-                  src={`/products/${image.url}`}
                   width={300}
                   height={300}
                   className="rounded-t shadow-md"
+                  src={`${image.url}`}
                 />
 
                 <button

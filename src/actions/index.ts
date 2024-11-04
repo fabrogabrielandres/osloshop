@@ -1,3 +1,6 @@
+export * from './products/get-All-Slug';
+
+export * from './products/create-update-product';
 export * from './category/get-categories';
 export * from './products/getProductBySlug';
 export * from './products/getPaginatedProductWithImages';
@@ -12,3 +15,5 @@ export * from "./country/get-countrys";
 export * from "./auth/newAccount";
 export * from "./auth/logOut";
 export * from "./auth/login";
+
+

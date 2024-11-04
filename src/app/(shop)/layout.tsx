@@ -11,7 +11,7 @@ export default function shopLayout({
       {/* <Hydration/> */}
       <TopMenu />
       <Sidebar />
-      {children}
+      <div className="px-5">{children}</div>
       <Footer />
     </main>
   );

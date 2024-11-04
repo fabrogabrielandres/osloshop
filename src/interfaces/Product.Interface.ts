@@ -12,11 +12,13 @@ export interface Product {
   title: string;
   gender: Categorie;
   producStock?: ProductStock | null;
+  categoryId?: string
 }
 
 export interface ImageInProduct {
-  id?: any | null;
+  id?: number | null;
   url?: string | null;
+  productId?:string
 }
 
 export interface CartProduct {
@@ -31,13 +33,13 @@ export interface CartProduct {
 
 export interface ProductStock {
   id?: string;
-  XS?: number;
-  S?: number;
-  M?: number;
-  L?: number;
-  XL?: number;
-  XXL?: number;
-  XXXL?: number;
+  XS: number;
+  S: number;
+  M: number;
+  L: number;
+  XL: number;
+  XXL: number;
+  XXXL: number;
   producStockId?: string;
 }
 
