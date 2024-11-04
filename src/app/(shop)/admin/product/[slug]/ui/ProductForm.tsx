@@ -1,8 +1,9 @@
 "use client";
 
-import { createUpdateProduct } from "@/actions";
+import { createUpdateProduct, deleteProductImage } from "@/actions";
 import { ProductImage } from "@/components";
 import { Product, ProductStock } from "@/interfaces";
+import { sleep } from "@/utils";
 import clsx from "clsx";
 import { FormikTouched, useFormik } from "formik";
 import { useRouter } from "next/navigation";
@@ -48,6 +49,15 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
     if (slugs.slug == product.slug) return;
     return slugs.slug;
   });
+
+  const [disableButtons, setDisableButtons] = useState(false);
+
+  const deleteImage = async (id: number, url: string) => {
+    setDisableButtons(true);
+    await sleep(5)
+    await deleteProductImage(id, url);
+    setDisableButtons(false);
+  };
 
   const [load, setLoad] = useState(true);
   useEffect(() => {
@@ -112,10 +122,9 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
         .min(0, "Must be greater than or equal to 0"),
     }),
     onSubmit: async (data) => {
-      console.log("subiendo", data);
       const { images, ...productToSave } = data;
       let dataTosabe: any = { ...productToSave };
-      console.log("images", images);
+      setDisableButtons(true);
 
       dataTosabe.inStock = 0;
       dataTosabe.categoryId = String(dataTosabe.categoryId);
@@ -123,61 +132,26 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
       dataTosabe.sizes = sizes.join(",");
       dataTosabe.id = product.id;
 
+      let imagesToMap: Array<File> = [];
 
-      
-      // const uploadPromises = images!.map(async (image) => {
-      //   try {
-      //     const buffer = await image.arrayBuffer();
-      //     const base64Image = Buffer.from(buffer).toString("base64");
-          
+      imagesToMap = images ? [...images] : [];
 
-      //     return base64Image;
-      //   } catch (error) {
-      //     console.log(error);
-      //     return null;
-      //   }
-      // });
-
-      const buffer = await images![0].arrayBuffer();
-      const base64Image = Buffer.from(buffer).toString("base64");
-      console.log("ejemplo",base64Image);
-      
-      const files = [...images!]
-      
-      const uploadPromises = (files!).map(async(image:any) => {
-        try {
-          const buffer = await image.arrayBuffer();
-          const base64Image = Buffer.from(buffer).toString("base64");
-          console.log("buffer",buffer);
-          console.log("base64Image",base64Image);
-          
-
-          return base64Image;
-        } catch (error) {
-          console.log(error);
-          return null;
-        }
+      const filePromise = imagesToMap!.map(async (image: any) => {
+        const buffer = await image.arrayBuffer();
+        const base64Image = Buffer.from(buffer).toString("base64");
+        return base64Image;
       });
-      
-      const respo = await Promise.all(uploadPromises)
 
-      console.log("respo",respo);
-      
+      const imagesbase64 = (await Promise.all(filePromise)) || [];
 
+      const responce = await createUpdateProduct({
+        data: dataTosabe,
+        images: imagesbase64 ? imagesbase64 : [],
+      });
 
-
-      // const imageResp = await Promise.all(uploadPromises) 
-
-      // console.log("imageResp",imageResp);
-      
-
-
-
-      const responce = await createUpdateProduct(dataTosabe);
-
-      // alert(`${JSON.stringify(responce)}`);
+      setDisableButtons(false);
       if (!responce.ok) {
-        alert("noooooo");
+        alert(responce.message);
         return;
       }
 
@@ -358,7 +332,10 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
         </div>
 
         <button
-          className="btn-primary w-full"
+          className={clsx("btn-primary w-full", {
+            "btn-disabled": disableButtons,
+          })}
+          disabled={disableButtons}
           onClick={() => {
             formik.submitForm();
           }}
@@ -440,21 +417,25 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {product.images?.map((image) => (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end ">
+            {product.images.map((image) => (
               <div key={image.id}>
                 <ProductImage
                   alt={product.title ?? ""}
                   width={300}
                   height={300}
-                  className="rounded-t shadow-md"
+                  className="rounded-t shadow-md flex bg-blue-200"
                   src={`${image.url}`}
                 />
 
                 <button
                   type="button"
-                  // onClick={() => deleteProductImage(image.id, image.url)}
-                  className="btn-danger w-full rounded-b-xl"
+                  onClick={() => deleteImage(image.id!, image.url!)}
+                  className={clsx("w-full rounded-b-xl", {
+                    "btn-disabled": disableButtons,
+                    "btn-danger": !disableButtons,
+                  })}
+                  disabled={disableButtons}
                 >
                   Eliminar
                 </button>

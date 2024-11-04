@@ -1,3 +1,4 @@
+export * from './products/delete-product-image';
 export * from './products/get-All-Slug';
 
 export * from './products/create-update-product';
@@ -15,5 +16,7 @@ export * from "./country/get-countrys";
 export * from "./auth/newAccount";
 export * from "./auth/logOut";
 export * from "./auth/login";
+
+
 
 
