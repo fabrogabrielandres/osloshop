@@ -11,6 +11,7 @@ import "../SlideShow.css";
 import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 import { useState } from "react";
 import { ImageInProduct } from "@/interfaces";
+import { ProductImage } from "../product-image/ProductImage";
 
 interface Props {
   images: ImageInProduct[];
@@ -43,11 +44,11 @@ export const ProductSliceShow = ({ className, images, title }: Props) => {
       >
         {images.map((image) => (
           <SwiperSlide key={image.id}>
-            <Image
+            <ProductImage
+              src={`${image.url}`}
               width={1024}
               height={800}
-              src={`/products/${image.url}`}
-              alt={title}
+              alt={image.url!}
               className="rounded-lg object-fill"
             />
           </SwiperSlide>
@@ -65,12 +66,12 @@ export const ProductSliceShow = ({ className, images, title }: Props) => {
       >
         {images.map((image) => (
           <SwiperSlide key={image.id}>
-            <Image
-              width={300}
-              height={300}
-              src={`/products/${image}`}
-              alt={title}
-              className="rounded-lg object-fill"
+            <ProductImage
+              src={`${image.url}`}
+              width={1024}
+              height={800}
+              alt={image.url!}
+              className="mr-5 rounded"
             />
           </SwiperSlide>
         ))}

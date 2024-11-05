@@ -417,29 +417,31 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end ">
-            {product.images.map((image) => (
-              <div key={image.id}>
-                <ProductImage
-                  alt={product.title ?? ""}
-                  width={300}
-                  height={300}
-                  className="rounded-t shadow-md flex bg-blue-200"
-                  src={`${image.url}`}
-                />
+            {product.images
+              ? product.images.map((image) => (
+                  <div key={image.id}>
+                    <ProductImage
+                      alt={product.title ?? ""}
+                      width={300}
+                      height={300}
+                      className="rounded-t shadow-md flex bg-blue-200"
+                      src={`${image.url}`}
+                    />
 
-                <button
-                  type="button"
-                  onClick={() => deleteImage(image.id!, image.url!)}
-                  className={clsx("w-full rounded-b-xl", {
-                    "btn-disabled": disableButtons,
-                    "btn-danger": !disableButtons,
-                  })}
-                  disabled={disableButtons}
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
+                    <button
+                      type="button"
+                      onClick={() => deleteImage(image.id!, image.url!)}
+                      className={clsx("w-full rounded-b-xl", {
+                        "btn-disabled": disableButtons,
+                        "btn-danger": !disableButtons,
+                      })}
+                      disabled={disableButtons}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>

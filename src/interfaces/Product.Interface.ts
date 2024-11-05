@@ -3,7 +3,7 @@ import { number } from "zod";
 export interface Product {
   id: string;
   description: string;
-  images: Array<ImageInProduct>;
+  images?: Array<ImageInProduct>;
   inStock: number;
   price: number;
   sizes: Size[];
