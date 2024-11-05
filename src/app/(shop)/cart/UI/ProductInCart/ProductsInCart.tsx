@@ -14,9 +14,7 @@ export const ProductsInCart = () => {
   const removeProduct = useCartProductStore((state) => state.removeProduct);
   const [loaded, setLoaded] = useState(false);
 
-
-  console.log("products",products);
-  
+  console.log("products", products);
 
   useEffect(() => {
     setLoaded(true);
@@ -32,23 +30,13 @@ export const ProductsInCart = () => {
       {products &&
         products.map((product) => (
           <div key={`${product.slug}${product.size}`} className="flex mb-5">
-            <Image
-              src={`/products/${product.image}`}
-              width={100}
-              height={100}
-              alt={product.title}
-              className="mr-5 rounded"
-            />
-            <span>{JSON.stringify(products)}</span>
-
             <ProductImage
-              src={`/products/${(product.image[0])}`}
+              src={`${product.images.url}`}
               width={100}
               height={100}
               alt={product.title}
               className="mr-5 rounded"
             />
-
             <div>
               <Link
                 className="hover:underline cursor-pointer"

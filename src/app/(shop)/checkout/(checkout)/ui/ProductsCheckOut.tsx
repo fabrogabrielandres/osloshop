@@ -1,5 +1,6 @@
 "use client";
 
+import { ProductImage } from "@/components";
 import { useCartProductStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import Image from "next/image";
@@ -23,8 +24,8 @@ export const ProductsCheckOut = () => {
       {products &&
         products.map((product) => (
           <div key={`${product.slug}${product.size}`} className="flex mb-5">
-            <Image
-              src={`/products/${product.image}`}
+            <ProductImage
+              src={`${product.images.url}`}
               width={100}
               height={100}
               style={{

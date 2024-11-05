@@ -1,10 +1,5 @@
-import Link from "next/link";
-
-import { OrderStatus, PayPalButton, Title } from "@/components";
-import { initialData } from "@/seed/seed";
+import { OrderStatus, PayPalButton, ProductImage, Title } from "@/components";
 import Image from "next/image";
-import clsx from "clsx";
-import { IoCardOutline } from "react-icons/io5";
 import { getItemByOrder } from "@/actions/order/getOrderById";
 import { redirect } from "next/navigation";
 
@@ -38,8 +33,8 @@ export default async function orderIdPage({ params }: Props) {
                 key={`${item.product.slug}${item.size}`}
                 className="flex mb-5"
               >
-                <Image
-                  src={`/products/${item.product.ProcutImage[0].url}`}
+                <ProductImage
+                  src={`${item.product.ProcutImage[0].url}`}
                   width={100}
                   height={100}
                   style={{
@@ -49,7 +44,6 @@ export default async function orderIdPage({ params }: Props) {
                   alt={item.product.title}
                   className="mr-5 rounded"
                 />
-
                 <div>
                   <p>{item.product.title}</p>
                   <p>

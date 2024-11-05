@@ -45,7 +45,7 @@ export const AddToCart = ({ product }: Props) => {
     if (!size) return;
     const cartProduct: CartProduct = {
       id,
-      image: images[0],
+      images: images[0],
       price,
       quantity,
       size,
