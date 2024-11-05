@@ -7,13 +7,13 @@ import { Gender } from "@prisma/client";
 interface Props {
   page?: number;
   take?: number;
-  gender?:Gender 
+  gender?: Gender;
 }
 
 export const getPaginatedProductWithImages = async ({
   page = 1,
   take = 12,
-  gender 
+  gender,
 }: Props) => {
   if (isNaN(Number(page))) page = 1;
   if (page < 1) page = 1;
@@ -29,28 +29,29 @@ export const getPaginatedProductWithImages = async ({
           select: {
             url: true,
           },
-        }
+        },
       },
       where: {
-        gender: gender 
-      }
+        gender: gender,
+      },
     });
 
     //2. get page total
     const numberOfProducts = await prisma.product.count({
-      where:{
-        gender:gender
-      }
+      where: {
+        gender: gender,
+      },
     });
     const totalPages = Math.ceil(numberOfProducts / take);
-    
 
     return {
       currentPage: page,
       totalPages: totalPages,
       products: products.map((product) => ({
         ...product,
-        images: product.ProcutImage.map((image) => image.url),
+        images: product.ProcutImage.map((image) => {
+          return { ...image };
+        }),
       })),
     };
   } catch (error) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { QuantitySelector } from "@/components";
+import { ProductImage, QuantitySelector } from "@/components";
 import { useCartProductStore } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,9 +8,15 @@ import { useEffect, useState } from "react";
 
 export const ProductsInCart = () => {
   const products = useCartProductStore((state) => state.cart);
-  const updateProductQuantity = useCartProductStore((state) => state.updateProductQuantity);
-  const removeProduct = useCartProductStore( state => state.removeProduct );
+  const updateProductQuantity = useCartProductStore(
+    (state) => state.updateProductQuantity
+  );
+  const removeProduct = useCartProductStore((state) => state.removeProduct);
   const [loaded, setLoaded] = useState(false);
+
+
+  console.log("products",products);
+  
 
   useEffect(() => {
     setLoaded(true);
@@ -30,14 +36,19 @@ export const ProductsInCart = () => {
               src={`/products/${product.image}`}
               width={100}
               height={100}
-              style={{
-                width: "100px",
-                height: "100px",
-              }}
               alt={product.title}
               className="mr-5 rounded"
             />
-        
+            <span>{JSON.stringify(products)}</span>
+
+            <ProductImage
+              src={`/products/${(product.image[0])}`}
+              width={100}
+              height={100}
+              alt={product.title}
+              className="mr-5 rounded"
+            />
+
             <div>
               <Link
                 className="hover:underline cursor-pointer"
@@ -52,9 +63,12 @@ export const ProductsInCart = () => {
                   updateProductQuantity(product, quantity)
                 }
               />
-            <button 
-              onClick={ () => removeProduct(product) }
-              className="underline mt-3">Remover</button>
+              <button
+                onClick={() => removeProduct(product)}
+                className="underline mt-3"
+              >
+                Remover
+              </button>
             </div>
           </div>
         ))}
