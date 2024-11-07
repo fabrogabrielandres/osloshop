@@ -17,6 +17,15 @@ export default async function orderIdPage({ params }: Props) {
   if (!ok || !order) {
     redirect("/");
   }
+
+  order.OrderItem.map((x) => {
+    if (!x.product.ProcutImage.length) {
+      x.product.ProcutImage.push({
+        url: "",
+      });
+    }
+  });
+
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
       <div className="flex flex-col w-[1000px]">
@@ -28,33 +37,39 @@ export default async function orderIdPage({ params }: Props) {
             <OrderStatus isPaid={order.isPaid} />
 
             {/* Items */}
-            {order.OrderItem!.map((item) => (
-              <div
-                key={`${item.product.slug}${item.size}`}
-                className="flex mb-5"
-              >
-                <ProductImage
-                  src={`${item.product.ProcutImage[0].url}`}
-                  width={100}
-                  height={100}
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                  }}
-                  alt={item.product.title}
-                  className="mr-5 rounded"
-                />
-                <div>
-                  <p>{item.product.title}</p>
-                  <p>
-                    ${item.price} x {item.quantity}
-                  </p>
-                  <p className="font-bold">
-                    Subtotal: ${item.price * item.quantity}
-                  </p>
-                </div>
-              </div>
-            ))}
+            {order.OrderItem
+              ? order.OrderItem!.map((item) => (
+                  <div
+                    key={`${item.product.slug}${item.size}`}
+                    className="flex mb-5"
+                  >
+                    <ProductImage
+                      src={`${
+                        item.product.ProcutImage[0].url
+                          ? item.product.ProcutImage[0].url
+                          : ""
+                      }`}
+                      width={100}
+                      height={100}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                      }}
+                      alt={item.product.title}
+                      className="mr-5 rounded"
+                    />
+                    <div>
+                      <p>{item.product.title}</p>
+                      <p>
+                        ${item.price} x {item.quantity}
+                      </p>
+                      <p className="font-bold">
+                        Subtotal: ${item.price * item.quantity}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              : ""}
           </div>
 
           {/* Checkout - Resumen de orden */}

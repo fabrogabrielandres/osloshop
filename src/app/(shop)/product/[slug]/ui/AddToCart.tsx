@@ -9,9 +9,13 @@ interface Props {
   product: Product;
 }
 export const AddToCart = ({ product }: Props) => {
-  const {  id, images, price, slug, title, producStock } = product;
-  const sizesmap= Object.entries({...producStock}).filter((product) => product[0] !== "id").filter((product) => product[0] !== "producStockId").filter((product) => Number(product[1]) > 0 ).map(product=>(product[0] as Size))
-   
+  const { id, images, price, slug, title, producStock } = product;
+  const sizesmap = Object.entries({ ...producStock })
+    .filter((product) => product[0] !== "id")
+    .filter((product) => product[0] !== "producStockId")
+    .filter((product) => Number(product[1]) > 0)
+    .map((product) => product[0] as Size);
+
   const [size, setSize] = useState<Size | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [posted, setPosted] = useState(false);
@@ -33,7 +37,7 @@ export const AddToCart = ({ product }: Props) => {
   useEffect(() => {
     if (!size) return;
     if (!producStock) return;
-    if ( producStock[size]! <= quantity) {
+    if (producStock[size]! <= quantity) {
       setDisableByStock(true);
     } else {
       setDisableByStock(false);
@@ -45,7 +49,7 @@ export const AddToCart = ({ product }: Props) => {
     if (!size) return;
     const cartProduct: CartProduct = {
       id,
-      images: images[0],
+      images: images![0],
       price,
       quantity,
       size,

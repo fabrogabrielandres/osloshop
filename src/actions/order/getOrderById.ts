@@ -48,8 +48,6 @@ export const getItemByOrder = async ({ id }: Props) => {
     });
     if( !order ) throw `${ id } no existe`;
 
-    
-
     if ( session.user.role === 'user' ) {
       if ( session.user.id !== order.userId ) {
         throw `${ id } no es de ese usuario`
