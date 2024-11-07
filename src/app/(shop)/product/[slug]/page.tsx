@@ -1,4 +1,4 @@
-export const revalidate = 86400; // 1 day
+export const revalidate = 0; // 1 day
 
 import {
   ProductMobileSlideshow,
@@ -27,20 +27,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product?.title ?? "Producto no encontrado",
       description: product?.description ?? "",
       // images: [], // https://tttttttttttyyyyyyyyyyyyy.com/products/image.png
-      images: [`/products/${product?.images[1].url}`],
+      // images: [`/products/${product?.images[1].url}`],
     },
   };
 }
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = params;
-
   const product = await getProductBySlug(slug);
-
-  console.log("product ***", product);
 
   if (!product) {
     notFound();
+  }
+
+  if (!product.images.length) {
+    product.images.push({
+      id: 2,
+      url: "",
+    });
   }
 
   return (

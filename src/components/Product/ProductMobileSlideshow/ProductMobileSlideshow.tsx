@@ -20,6 +20,8 @@ interface Props {
 }
 
 export const ProductMobileSlideshow = ({ images, title, className }: Props) => {
+  
+  
   return (
     <div className={className}>
       <Swiper

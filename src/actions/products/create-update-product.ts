@@ -185,18 +185,15 @@ const uploadImages = async (imagesbase64: Array<string>) => {
   
   const uploadPromises = imagesbase64.map(async(image) => {
     try {
-      // return  image
       const resp = await cloudinary.uploader.upload(`data:image/png;base64,${image}`).then((r) => r.secure_url);
-      console.log("en funcion upload try resp",resp);
+
       return resp
     } catch (error) {
-      console.log("en funcion upload catch",error);
       console.log(error);
       return null;
     }
   });
 
   const allImages = await Promise.all(uploadPromises);
-  console.log("en funcion upload catch fin all images", allImages!);
   return allImages;
 };

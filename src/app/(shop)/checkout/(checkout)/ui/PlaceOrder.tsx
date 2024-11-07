@@ -38,7 +38,7 @@ export const PlaceOrder = () => {
 
     // ! Server Action
     const resp = await placeOrder(productsToOrder, address);
-    console.log("llgue",resp);
+
     
     if (!resp?.ok) {
       setIsPlacingOrder(false);

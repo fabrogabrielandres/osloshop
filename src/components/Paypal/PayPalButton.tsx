@@ -50,7 +50,7 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
     if (!ok) {
       throw new Error("No se pudo actualizar la orden");
     }
-    console.log("transactionId:", transactionId);
+    // console.log("transactionId:", transactionId);
 
     return transactionId;
   };

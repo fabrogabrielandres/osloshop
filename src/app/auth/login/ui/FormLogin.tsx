@@ -96,7 +96,6 @@ export const FormLogin = () => {
   // const router = useRouter();
   const [state, dispatch] = useFormState(authenticate, undefined);
   
-  console.log(state);
 
   useEffect(() => {
     if ( state === 'Success' ) {

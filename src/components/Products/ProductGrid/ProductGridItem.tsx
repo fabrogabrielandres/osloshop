@@ -16,7 +16,7 @@ export const ProductGridItem = ({ product }: Props) => {
   const [displayImage, setDisplayImage] = useState(product.images?.at(0)?.url ? product.images?.at(0)?.url : "");
 
   return (
-    <div className="rounded-md overflow-hidden fade-in">
+    <div className="rounded-md overflow-hidden fade-in flex flex-col justify-between">
       <Link href={`/product/${product.slug}`}>
         <div
           onMouseLeave={() => setDisplayImage(product.images?.at(0)?.url ? product.images?.at(0)?.url : "" )}
