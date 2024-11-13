@@ -24,9 +24,9 @@ export default async function Home({ searchParams }: Props) {
   return (
     <>
       <Title
-        subtitle="Todos los productos"
+        subtitle="All products"
         className="mb-2"
-        title="Todos las categorias"
+        title="All categories"
       ></Title>
       <div>
         <ProductGrid products={products}></ProductGrid>
