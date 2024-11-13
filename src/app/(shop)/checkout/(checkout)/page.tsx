@@ -4,7 +4,6 @@ import { Title } from "@/components";
 import { ProductsCheckOut } from "./ui/ProductsCheckOut";
 import { PlaceOrder } from "./ui/PlaceOrder";
 
-
 export default function checkoutPage() {
   // redirect('/empty');
 
@@ -16,9 +15,9 @@ export default function checkoutPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {/* Carrito */}
           <div className="flex flex-col mt-5">
-            <span className="text-xl">Ajustar elementos</span>
+            <span className="text-xl">Setting items</span>
             <Link href="/cart" className="underline mb-5">
-              Editar carrito
+              Edit cart
             </Link>
 
             {/* Items */}

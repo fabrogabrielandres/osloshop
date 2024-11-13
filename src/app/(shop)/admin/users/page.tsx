@@ -19,7 +19,7 @@ export default async function OrdersPage() {
 
   return (
     <>
-      <Title title="Mantenimiento de usuarios" />
+      <Title title="User maintenance" />
 
       <div className="mb-10">
         <UsersTable users={ users } />

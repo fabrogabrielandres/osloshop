@@ -88,7 +88,7 @@ export const AddToCart = ({ product }: Props) => {
         onClick={addToCart}
         className={clsx("btn-primary my-5", { "btn-disabled": disableByStock })}
       >
-        Agregar al carrito
+        Add to cart
       </button>
     </>
   );

@@ -166,7 +166,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
       {/* <h1>{JSON.stringify(formik.values)}</h1> */}
       <div className="w-full">
         <div className="flex flex-col mb-2">
-          <span>Título</span>
+          <span>Title</span>
           <input
             //  className="p-2 border rounded-md bg-gray-200"
             className={clsx("px-5 py-2 border bg-gray-200 rounded", {
@@ -211,7 +211,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Descripción</span>
+          <span>Description</span>
 
           <textarea
             className={clsx("px-5 py-2 border bg-gray-200 rounded", {
@@ -302,7 +302,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
         </div>
 
         <div className="flex flex-col mb-2">
-          <span>Categoria</span>
+          <span>Category</span>
           <select
             className={clsx("px-5 py-2 border bg-gray-200 rounded", {
               "border-red-500":
@@ -339,7 +339,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
             formik.submitForm();
           }}
         >
-          Guardar
+          Save
         </button>
       </div>
 
@@ -347,7 +347,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
       <div className="w-full">
         {/* As checkboxes */}
         <div className="flex flex-col mb-2">
-          <span>Tallas</span>
+          <span>Sizes</span>
           {sizes.map((size: any) => (
             <div
               key={String(size)}
@@ -401,7 +401,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
           ))}
 
           <div className="flex flex-col mb-2">
-            <span>Fotos</span>
+            <span>Pictures</span>
             <input
               id={"images"}
               name={"images"}
@@ -437,7 +437,7 @@ export const ProductForm = ({ product, categories, allSlugs }: Props) => {
                       })}
                       disabled={disableButtons}
                     >
-                      Eliminar
+                      Delete
                     </button>
                   </div>
                 ))

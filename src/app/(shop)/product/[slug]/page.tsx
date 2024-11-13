@@ -82,7 +82,7 @@ export default async function ProductPage({ params }: Props) {
 
         <AddToCart product={product} />
         {/* Descripción */}
-        <h3 className="font-bold text-sm">Descripción</h3>
+        <h3 className="font-bold text-sm">Description</h3>
         <p className="font-light">{product.description}</p>
       </div>
     </div>

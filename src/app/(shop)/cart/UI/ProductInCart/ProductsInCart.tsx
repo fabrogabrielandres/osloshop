@@ -14,7 +14,6 @@ export const ProductsInCart = () => {
   const removeProduct = useCartProductStore((state) => state.removeProduct);
   const [loaded, setLoaded] = useState(false);
 
-  console.log("products", products);
 
   useEffect(() => {
     setLoaded(true);
@@ -55,7 +54,7 @@ export const ProductsInCart = () => {
                 onClick={() => removeProduct(product)}
                 className="underline mt-3"
               >
-                Remover
+                Remove
               </button>
             </div>
           </div>

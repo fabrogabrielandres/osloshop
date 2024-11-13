@@ -122,7 +122,7 @@ export const FormAndress = ({ countries }: Props) => {
   ) : (
     <div className="grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2">
       <div className="flex flex-col mb-2">
-        <span>Nombres</span>
+        <span>Names</span>
         <input
           //  className="p-2 border rounded-md bg-gray-200"
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
@@ -147,7 +147,7 @@ export const FormAndress = ({ countries }: Props) => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Apellidos</span>
+        <span>Surname</span>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
             "border-red-500": formik.errors.lastName && formik.touched.lastName,
@@ -170,7 +170,7 @@ export const FormAndress = ({ countries }: Props) => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Dirección</span>
+        <span>Address</span>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
             "border-red-500": formik.errors.address && formik.touched.address,
@@ -193,7 +193,7 @@ export const FormAndress = ({ countries }: Props) => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Dirección 2 (opcional)</span>
+        <span>Address 2 (opcional)</span>
         <input
           className="px-5 py-2 border bg-gray-200 rounded"
           id="address2"
@@ -209,7 +209,7 @@ export const FormAndress = ({ countries }: Props) => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Código postal</span>
+        <span>Postcode</span>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
             "border-red-500":
@@ -233,7 +233,7 @@ export const FormAndress = ({ countries }: Props) => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Ciudad</span>
+        <span>City</span>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
             "border-red-500": formik.errors.city && formik.touched.city,
@@ -270,7 +270,7 @@ export const FormAndress = ({ countries }: Props) => {
           onBlur={formik.handleBlur}
           value={formik.values.country}
         >
-          <option value="">[ Seleccione ]</option>
+          <option value="">[ Select ]</option>
           {countries.map(({ id, name }) => (
             <option key={id} value={id}>
               {name}
@@ -285,7 +285,7 @@ export const FormAndress = ({ countries }: Props) => {
       </div>
 
       <div className="flex flex-col mb-2">
-        <span>Teléfono</span>
+        <span>Telephone</span>
         <input
           className={clsx("px-5 py-2 border bg-gray-200 rounded", {
             "border-red-500":
@@ -341,7 +341,7 @@ export const FormAndress = ({ countries }: Props) => {
               </svg>
             </div>
           </label>
-          <span className="ml-4"> ¿Desea guardar la direccion?</span>
+          <span className="ml-4"> Do you want to save the address?</span>
         </div>
         <button
           onClick={formik.submitForm}
@@ -351,7 +351,7 @@ export const FormAndress = ({ countries }: Props) => {
           })}
           disabled={!formik.isValid && !formik.dirty}
         >
-          Siguiente
+          Next
         </button>
       </div>
     </div>
